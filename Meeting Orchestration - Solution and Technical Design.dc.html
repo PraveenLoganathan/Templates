@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    doc-page:not(:defined){visibility:hidden}
+    body{margin:0;font-family:'Public Sans',system-ui,sans-serif;}
+    a{color:#1b4d3a;} a:hover{color:#143a2b;}
+  </style>
+  <script src="./doc-page.js"></script>
+</helmet>
+
+<doc-page margin="0.8in">
+
+  <div slot="header" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 8px;border-bottom:1px solid #e3e2dc;font:500 9.5px 'IBM Plex Mono',monospace;letter-spacing:.09em;color:#8b938c;text-transform:uppercase;">
+    <span>Meeting Orchestration · Solution &amp; Technical Design</span>
+    <span>{{ classification }} · {{ version }}</span>
+  </div>
+
+  <div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 0 10px;border-top:1px solid #e3e2dc;font:500 9.5px 'IBM Plex Mono',monospace;letter-spacing:.06em;color:#8b938c;">
+    <span>Private Banking · Technology</span>
+    <span>Retained on SharePoint · review annually</span>
+  </div>
+
+  <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a6a2b;margin-bottom:12px;">Document B · Solution &amp; Technical Design</div>
+
+  <h1 style="font-family:'Newsreader',Georgia,serif;font-size:40px;font-weight:500;line-height:1.12;letter-spacing:-.015em;color:#12241d;margin:0 0 12px;">Meeting Orchestration — Solution Design</h1>
+
+  <p style="font-size:18px;line-height:1.55;color:#5d6560;margin:0 0 26px;max-width:46em;">How the Meeting Orchestration code app is built: its components, data, interfaces, AI design, controls and release path. Written so that an architecture reviewer can assess it, a security reviewer can approve it, and a team inheriting it in two years can maintain it.</p>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:0 0 8px;break-inside:avoid;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 10px 7px;width:26%;">Document control</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 10px 7px;">Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#5d6560;">Reference</td><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#12241d;font-family:'IBM Plex Mono',monospace;font-size:12px;">PB-CJ-MO-002</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#5d6560;">Version</td><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#12241d;">{{ version }}</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#5d6560;">Status</td><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#12241d;">{{ status }}</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#5d6560;">Classification</td><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#12241d;">{{ classification }}</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#5d6560;">Design authority</td><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#12241d;">Technology lead, Private Banking</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#5d6560;">Reviewers</td><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#12241d;">Architecture review board · Security review · Data Protection Officer</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#5d6560;">Baselined against</td><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#12241d;">Prototype v5 (Week 2) · endorsement decision PB-CJ-MO-001</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#5d6560;">Next review</td><td style="padding:8px 10px;border-bottom:1px solid #e6e5df;color:#12241d;">Before pilot go-live, then at each material change</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">1 · Purpose, scope and audience</h2>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">This document is the technical counterpart to the business case (PB-CJ-MO-001). Where that document records <em>why</em>, this one records <em>how</em>. It is the reference a reviewer approves against and the artefact a future maintainer reads first.</p>
+
+  <div style="background:#f6f5f2;border-left:3px solid #1b4d3a;padding:14px 18px;margin:18px 0;break-inside:avoid;">
+    <div style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8a6a2b;margin-bottom:6px;">Scope</div>
+    <p style="margin:0;font-size:14.5px;line-height:1.6;color:#2c332e;">The Meeting Orchestration code app, its Dataverse schema, its Graph and Copilot Studio interfaces, the Power Automate fulfilment flow, the client-facing booking page, and the controls surrounding all of these.</p>
+    <div style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8a6a2b;margin:14px 0 6px;">Out of scope</div>
+    <p style="margin:0;font-size:14.5px;line-height:1.6;color:#2c332e;">Changes to Dynamics 365 schema or Exchange configuration beyond what is listed as a dependency. Tenant-level identity and network architecture, which are covered by existing bank standards this design inherits.</p>
+  </div>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">2 · Solution overview</h2>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">A single-page React application, hosted as a Power Platform code app, is the only surface the Relationship Manager touches. It holds the journey state, the review gates and the send action. Every other component is called from it or triggered by it. There is no separately provisioned service, no bespoke hosting and no external AI endpoint.</p>
+
+  <div style="border:1px solid #e3e2dc;border-radius:10px;padding:20px;margin:18px 0;background:#fbfaf7;break-inside:avoid;">
+    <div style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8b938c;margin-bottom:14px;">Context — components and their edges</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div style="border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;background:#fff;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Client</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">Sends the request; picks a time on the booking page</div></div>
+      <div style="border:2px solid #1b4d3a;border-radius:8px;padding:12px 14px;background:#f3f7f4;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Code app</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">The RM's one screen. Flow, state, review gates, send</div></div>
+      <div style="border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;background:#fff;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Copilot Studio agent</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">Reads the request · drafts the invitation. Two jobs, no decisions, no sends</div></div>
+      <div style="border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;background:#fff;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Microsoft Graph</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">Free/busy, rooms, calendar events</div></div>
+      <div style="border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;background:#fff;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Dynamics 365</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">Client record, partner flag, relationship data</div></div>
+      <div style="border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;background:#fff;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Dataverse</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">Meeting record, state machine, audit timeline</div></div>
+      <div style="border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;background:#fff;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Power Automate</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">Fulfilment on confirmation; operational notifications</div></div>
+      <div style="border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;background:#fff;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Microsoft Entra</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">Identity, roles, token issuance</div></div>
+      <div style="border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;background:#fff;"><div style="font-weight:700;font-size:13.5px;color:#12241d;">Booking page</div><div style="font-size:12.5px;color:#5d6560;line-height:1.45;margin-top:4px;">Tokenised, unauthenticated, single-purpose client surface</div></div>
+    </div>
+    <div style="font-size:12px;color:#8b938c;margin-top:14px;line-height:1.5;">All components sit in the bank's existing Microsoft tenancy. The code app is the only component with a user interface for staff; the booking page is the only component reachable by a client.</div>
+  </div>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">3 · Component responsibilities</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:20%;">Component</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Owns</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:28%;">Explicitly does not</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Code app (React)</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Journey state across the three steps; field-level provenance of AI-extracted values; slot selection; draft editing; the send action; role-scoped views of the meeting book.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Hold long-term data, call the model directly, or write calendar events itself.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Copilot Studio agent</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Two operations: extract structured details from an unstructured request; draft an invitation in a chosen tone from supplied facts.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#96301f;line-height:1.5;">Decide attendees, choose slots, send anything, or write to any system.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Microsoft Graph</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Free/busy for internal attendees, room availability and capacity, creation of the confirmed event with the room resource.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Hold provisional invites — the app holds candidates in Dataverse instead.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Dynamics 365</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">System of record for the client, the owning banker, the partner relationship flag and contact details.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Store meeting orchestration state.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Dataverse</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">The meeting record, candidate slots, draft text and approval, and the append-only orchestration timeline.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Duplicate client master data beyond a reference and a display cache.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Power Automate</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Post-selection fulfilment: create the event, release unused holds, notify catering, reception and housekeeping, write the audit entries.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Contain business rules about who should attend.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Booking page</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Presents only the slots the RM approved; captures one selection; confirms.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#96301f;line-height:1.5;">Expose any client data beyond the meeting being arranged.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">4 · End-to-end sequence</h2>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">One booking, from request to confirmation. Steps marked <strong>GATE</strong> require an explicit human action and cannot be bypassed.</p>
+
+  <table style="width:100%;border-collapse:collapse;font-size:12.5px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:5%;">#</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:17%;">Component</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;">Operation</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:26%;">Data written</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">1</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Code app</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">RM creates a meeting; pastes the client's email or enters details manually.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Meeting record created, state <code style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">Draft</code></td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">2</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Copilot Studio</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Extract: client, meeting type, duration, location, attendees, catering, dietary needs. Returns values with confidence.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Field values plus provenance and confidence flags</td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">3</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Dynamics 365</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Resolve and verify the client; read the partner flag; auto-include the partner as an attendee.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Client reference, attendee list</td></tr>
+      <tr style="background:#f3f7f4;"><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">4</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">RM · GATE 1</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Confirms the extracted details. AI-sourced fields are labelled; low-confidence fields are labelled <em>check</em>.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Details confirmed, actor and timestamp</td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">5</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Graph</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Read free/busy for all internal attendees over the chosen window; find rooms matching location, capacity and required turnaround time.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Candidate slots with room assignment</td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">6</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Code app</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Rank candidates by fit — availability of all parties, room suitability, travel implications for the client.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Ranked slot list with reasons</td></tr>
+      <tr style="background:#f3f7f4;"><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">7</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">RM · selection</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Chooses which slots the client will see — one, two or three. Only these leave the bank.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Offered slots</td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">8</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Copilot Studio</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Draft the invitation from the confirmed facts in the selected tone (formal, warm, concise).</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Draft body, tone, version</td></tr>
+      <tr style="background:#f3f7f4;"><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">9</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">RM · GATE 2</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Reviews, edits freely, and presses Send. Nothing is transmitted before this action.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Approved text, approver, timestamp</td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">10</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Code app</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Issues a single-use tokenised booking link to the client; meeting moves to <code style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">Awaiting</code>.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Booking token, expiry, sent record</td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">11</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Booking page</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Client selects a slot. Token validated for authenticity, expiry and single use.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Selection, source IP, timestamp</td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">12</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Power Automate</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Validated trigger: create the Outlook event with attendees and room; release the other holds; notify catering, reception and housekeeping.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Event id, room id, notification receipts</td></tr>
+      <tr><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">13</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;">Dataverse</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Meeting moves to <code style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">Confirmed</code>; the full timeline is written; the client sees an immediate confirmation.</td><td style="padding:8px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Final state, complete audit timeline</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">5 · Functional specification by screen</h2>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Screens below are captured from prototype v5, which is the behavioural specification for the build. Visual treatment is not final; behaviour is.</p>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">5.1 Meeting book — Relationship Manager</h3>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f01-rm-home.png" alt="RM meeting book" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 1</span> &nbsp; Landing view, scoped to the signed-in banker.</figcaption>
+  </figure>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">A <em>Needs attention</em> band surfaces exceptions — most commonly a client who cannot make any offered slot. Four counters (need action, awaiting customer, confirmed, average time to confirm) double as filters. The table below is filterable by status and searchable by free text. Row click opens the meeting record.</p>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">5.2 Meeting book — Lead banker</h3>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f11-lead-book.png" alt="Lead banker team book" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 2</span> &nbsp; The same book, scoped to the team, with a banker filter.</figcaption>
+  </figure>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">The lead view is the same component with a widened data scope — it is not a separate application. Access is read-wide; the lead cannot send on another banker's behalf. See §9 for the role definitions this enforces.</p>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">5.3 Step 1 — Details and AI intake</h3>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f02-intake.png" alt="AI intake, empty state" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 3</span> &nbsp; The RM may drop an <code style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">.eml</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">.msg</code> or <code style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">.txt</code> file, paste text, or ignore the intake and fill the form by hand. AI assistance is optional at every point.</figcaption>
+  </figure>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f03-extracted.png" alt="Extracted details with provenance" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 4</span> &nbsp; Gate 1. Extracted values are summarised, individually attributed to the AI, and must be confirmed before the journey continues.</figcaption>
+  </figure>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Each field carries a provenance marker: <strong>AI</strong> where the value was extracted, <strong>AI · CHECK</strong> where it was inferred rather than stated. The client is resolved against Dynamics and shown as <em>verified</em>; where the client record carries a partner relationship, the partner is added automatically and the fact is stated on screen. The primary action is disabled until a client and a meeting type exist.</p>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">5.4 Step 2 — Availability and times</h3>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f04-finding-times.png" alt="Availability resolution progress" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 5</span> &nbsp; Resolution is narrated step by step so the RM can see which diaries and constraints were considered — including room turnaround time where catering is involved.</figcaption>
+  </figure>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f05-suggested-times.png" alt="Ranked slots" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 6</span> &nbsp; Ranked candidates with room, hold duration and attendee availability. Selection state controls what the client is offered.</figcaption>
+  </figure>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Ranking is deterministic application logic, not model output: all-parties-free outranks partial availability; a suitable room in the requested building outranks a fallback; a location that avoids client travel is preferred. Reasons are displayed so the RM can override with knowledge the system does not hold. Where no combination fits, the app offers to widen the window or relax constraints rather than returning nothing.</p>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">5.5 Step 3 — Invitation review</h3>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f06-invitation-review.png" alt="AI-drafted invitation awaiting approval" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 7</span> &nbsp; Gate 2. The draft is explicitly labelled as AI-drafted and the screen states plainly that nothing goes out until Send is pressed.</figcaption>
+  </figure>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">The body is fully editable. Tone can be changed (formal, warm, concise) and the draft regenerated; where the RM has already edited the text, regeneration requires confirmation and a redline of what would change is available. The confirmed details and the offered times are restated above the draft so the RM approves against facts rather than memory.</p>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">5.6 Client booking page</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0 20px;break-inside:avoid;">
+    <figure style="margin:0;"><img src="figures/f08-customer-booking.png" alt="Client booking page" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;"></figure>
+    <figure style="margin:0;"><img src="figures/f09-customer-confirmed.png" alt="Client confirmation" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;"></figure>
+  </div>
+  <p style="margin:0 0 12px;font-size:12.5px;color:#5d6560;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 8</span> &nbsp; The only client-facing surface. It shows the meeting subject, the banker, the duration, the city and the approved slots — nothing else. Selection confirms instantly.</p>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">5.7 Meeting record and orchestration timeline</h3>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f07-sent-awaiting.png" alt="Meeting awaiting client selection" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 9</span> &nbsp; Awaiting selection: the room is held, downstream logistics are queued but not committed.</figcaption>
+  </figure>
+  <figure style="margin:12px 0 20px;break-inside:avoid;">
+    <img src="figures/f10-confirmed-audit.png" alt="Confirmed meeting with timeline" style="width:100%;display:block;border:1px solid #e3e2dc;border-radius:6px;">
+    <figcaption style="font-size:12.5px;color:#5d6560;margin-top:8px;line-height:1.5;"><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;">FIGURE 10</span> &nbsp; Confirmed: logistics executed, and the timeline records each event with its actor and source system. This is the audit evidence described in §11.</figcaption>
+  </figure>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">5.8 Exception paths</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:12px 0 16px;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:26%;">Exception</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Behaviour</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">No slot fits</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">The app explains which constraint blocked the search and offers to widen the window to three weeks or relax a constraint. It never returns an empty screen.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Client cannot make any offered slot</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Meeting moves to <code style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;">Needs action</code> and appears in the RM's attention band. Re-proposal reuses the confirmed details and drafts an apologetic reschedule message.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Cancellation</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">A cancellation note is drafted for RM approval; the event and room are released and downstream teams are notified. The timeline retains the full history.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Partner diary not readable</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">The partner is shown as unresolved and the EA path is retained as a documented manual exception; the meeting continues without blocking.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Agent unavailable or slow</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Manual entry and a template-based draft remain available. The AI is an accelerator, never a single point of failure. See §7.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Token expired or reused</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">The booking page declines and instructs the client to contact their banker; the attempt is recorded on the timeline.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">6 · Data model</h2>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Dataverse holds orchestration state only. Client master data stays in Dynamics 365 and is referenced, not copied; a minimal display cache (name, salutation, email) is held on the meeting so the record remains readable if a client is later restricted.</p>
+
+  <table style="width:100%;border-collapse:collapse;font-size:12.5px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:22%;">Table</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;">Key fields</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:24%;">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Meeting</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">id · clientRef · owningBankerRef · type · duration · location · building · roomPreference · cateringOption · dietaryNotes · status · createdOn · confirmedSlotRef · sourceRequestRef</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">One row per booking attempt; the aggregate root</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">MeetingAttendee</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">meetingRef · principalRef · role (client, banker, analyst, partner) · required · addedBy (user or rule) · availabilityStatus</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Records whether the partner was added by rule or by hand</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">CandidateSlot</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">meetingRef · start · end · roomRef · rank · fitReason · offeredToClient · holdReleasedOn</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Replaces provisional Outlook invites entirely</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Draft</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">meetingRef · kind (invite, reschedule, cancel) · tone · generatedText · finalText · editedByHuman · approvedBy · approvedOn</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Both the generated and the sent text are retained</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">BookingToken</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">meetingRef · tokenHash · issuedOn · expiresOn · consumedOn · attempts</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Hash stored, never the token itself</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">TimelineEvent</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">meetingRef · sequence · eventType · actorRef · actorKind (human, rule, agent, system) · sourceSystem · occurredOn · payloadSummary</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Append-only; the audit record described in §11</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">FulfilmentTask</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">meetingRef · taskType (event, room, catering, reception, housekeeping) · status · externalRef · lastAttempt · error</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Makes partial fulfilment visible and retryable</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">6.1 Meeting state machine</h3>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;"><code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f6f5f2;padding:2px 6px;border-radius:3px;">Draft → DetailsConfirmed → SlotsResolved → AwaitingClient → Confirmed</code>, with <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f6f5f2;padding:2px 6px;border-radius:3px;">NeedsAction</code> reachable from <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f6f5f2;padding:2px 6px;border-radius:3px;">AwaitingClient</code> and <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f6f5f2;padding:2px 6px;border-radius:3px;">Cancelled</code> reachable from any state. Transitions are the only permitted writes to <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#f6f5f2;padding:2px 6px;border-radius:3px;">status</code>, and each writes a TimelineEvent.</p>
+
+  <h3 style="font-size:15px;font-weight:700;color:#12241d;margin:22px 0 5px;break-after:avoid;">6.2 Fields read from Dynamics 365</h3>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Client identifier, display name, salutation, primary email, owning banker, partner relationship flag and partner identity, client office or preferred location. Read-only. No write-back to Dynamics is in scope for the pilot; a future increment may log the confirmed meeting against the client record.</p>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">7 · Interfaces and error handling</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:12.5px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:20%;">Interface</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:16%;">Auth</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;">Operations</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:28%;">Failure behaviour</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Graph — calendar</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Delegated, on behalf of the RM</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Read free/busy; find meeting times; create event with attendees and resource</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Throttling handled with backoff; partial results shown with an explicit note about which diary could not be read</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Graph — rooms</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Delegated</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">List room lists; read room availability and capacity</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Falls back to video suite as an offered option; never silently drops the room requirement</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Dataverse</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Delegated, row-level security</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">CRUD on the meeting aggregate; append-only on the timeline</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Write failure blocks the transition and surfaces to the RM; no silent state drift</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Copilot Studio</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Connector, service identity within tenancy</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Extract details from text; draft invitation, reschedule or cancellation in a given tone</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Timeout after a defined budget; the RM is offered manual entry or a deterministic template. The journey never blocks on the agent</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Dynamics 365</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Delegated, read-only</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Client lookup; partner relationship read</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Client shown as unverified; the RM may proceed but the state is recorded on the timeline</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Power Automate</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Validated trigger from Dataverse</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Fulfilment on confirmation; notification fan-out; hold release</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Idempotent per meeting; per-task retry; failures surface as a red FulfilmentTask on the meeting record</td></tr>
+    </tbody>
+  </table>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Every long-running operation is narrated in the interface rather than hidden behind a spinner, and a slow-response notice appears once a threshold is exceeded. This is a deliberate design position: the RM should always know what the system is doing on their behalf.</p>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">8 · AI design and governance</h2>
+
+  <div style="background:#f3f7f4;border:1px solid #cfdfd4;border-radius:8px;padding:16px 18px;margin:16px 0;break-inside:avoid;">
+    <div style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#1b4d3a;margin-bottom:8px;">Model use statement</div>
+    <p style="margin:0 0 8px;font-size:14.5px;line-height:1.6;color:#2c332e;">The application uses a Copilot Studio agent within the bank's Microsoft tenancy to perform two bounded language tasks: <strong>reading</strong> an unstructured client request into structured fields, and <strong>drafting</strong> client-facing text from facts the application supplies. It is generative assistance, not automated decision-making.</p>
+    <p style="margin:0;font-size:14.5px;line-height:1.6;color:#2c332e;">No automated decision producing legal or similarly significant effects is taken about any individual. No client data is used to train or fine-tune any model. No AI endpoint outside the tenancy is called.</p>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:24%;">Control</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Implementation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Bounded capability</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">The agent exposes exactly two operations. It has no tools, no write access to any system, and no ability to send.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Human in the loop</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Two mandatory gates: details confirmation and send approval. Neither can be skipped, defaulted or automated.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Provenance</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Every AI-derived field is visibly attributed at the point of use, with a separate marker where the value was inferred rather than stated.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Data minimisation</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Only the request text and the facts needed for the draft are passed. No account, portfolio, balance or advice data is sent to the agent.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Determinism where it matters</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Slot ranking, partner inclusion, room fit and all state transitions are application logic. The model influences words, never outcomes.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Guardrail management</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Tone, topics and prohibited content are configured in Copilot Studio, versioned there, and changed without an application release. Changes are subject to the same review as any configuration change (§14).</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Retention of outputs</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Both the generated draft and the human-approved final text are retained against the meeting, so what the model produced and what the bank actually sent are separately evidenced.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Quality monitoring</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Extraction correction rate and draft edit rate are tracked during the pilot as leading indicators of drift. A sustained rise triggers guardrail review.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Graceful degradation</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">The full journey is completable with the agent unavailable. AI is an accelerator, not a dependency.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">9 · Identity, access and segregation of duties</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:22%;">Role</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Can</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:28%;">Cannot</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Relationship Manager</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Create, progress, approve and send for meetings they own; read their own book.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">See or act on another banker's meetings.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Lead Private Banker</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Read the whole team book; filter by banker; see status and ageing.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#96301f;line-height:1.5;">Approve or send on another banker's behalf.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Team Assistant</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Act on meetings explicitly delegated to them (lunches, intermediaries, complex events).</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Access undelegated client meetings.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Operations (catering, reception)</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Receive notifications containing only what is needed to fulfil the task.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#96301f;line-height:1.5;">Access the application or client data.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Application support</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Diagnose using telemetry and timeline metadata.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#96301f;line-height:1.5;">Read draft content or client correspondence in the course of routine support.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Developer</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Author and review code in development environments.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#96301f;line-height:1.5;">Approve their own change, or deploy to production directly.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Client</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Open a tokenised booking page and select from the offered slots.</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#96301f;line-height:1.5;">Reach any other data or surface.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Staff authenticate with Microsoft Entra; no local accounts exist. Graph and Dynamics are called with delegated permissions so a user can never see through the application what they could not see directly. Dataverse row-level security enforces book scoping. The three duties of <strong>authoring</strong>, <strong>approving</strong> and <strong>deploying</strong> a change are held by different people; the pipeline enforces this rather than relying on convention.</p>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">10 · Data classification, personal data and residency</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:12.5px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:20%;">Data element</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:14%;">Class</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;">Purpose</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 7px 7px;width:22%;">Retention</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;">Client name, salutation, email</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Confidential · PII</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Identify the client and address the invitation</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Per client-communication policy</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;">Meeting purpose and type</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Confidential</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Duration defaults, room fit, appropriate attendees</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">With the meeting record</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;">Original request text</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Confidential · PII</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Source for extraction; evidence of what was asked</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Shortest period consistent with audit; then summary only</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;">Dietary requirements</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#96301f;">Sensitive · may imply health or belief</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Catering fulfilment only</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Purged shortly after the meeting date</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;">Internal diary availability</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Internal</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Free/busy status only — never subject or attendees of other meetings</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Not persisted beyond the session</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;">Draft and final message text</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Confidential · PII</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Evidence of what was proposed and sent</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Per client-communication policy</td></tr>
+      <tr><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#12241d;">Timeline events</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Internal · audit</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Demonstrate control operation</td><td style="padding:9px 7px;border-bottom:1px solid #e6e5df;color:#5d6560;line-height:1.5;">Per records-retention schedule</td></tr>
+    </tbody>
+  </table>
+
+  <div style="background:#f7f0e2;border:1px dashed #c8a253;border-radius:6px;padding:12px 16px;margin:14px 0;break-inside:avoid;">
+    <p style="margin:0;font-size:13.5px;line-height:1.6;color:#8a6a2b;"><strong>To be confirmed with the Data Protection Officer:</strong> the exact retention periods above, the lawful basis recorded for each processing purpose, and whether the original request text should be retained at all beyond extraction. These are marked deliberately rather than assumed.</p>
+  </div>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Data stays within the bank's existing Microsoft tenancy and its established regional boundary; the application introduces no new storage location and no new processor. Data-subject rights are served through the existing processes for Dynamics and Exchange, extended to cover the meeting record. A privacy impact assessment update should accompany this design at review.</p>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">11 · Records, audit and evidence</h2>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">The orchestration timeline is the primary audit artefact and is visible in the product, not only in logs. Each entry records the event, the actor, whether that actor was a human, a rule, the agent or the system, the source system, and a timestamp. It is append-only; no user role can edit or delete an entry.</p>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:36%;">Question an auditor may ask</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Where the answer is</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">What was offered to this client, and by whom?</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">CandidateSlot rows flagged <em>offeredToClient</em>, plus the approved Draft and its approver.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Did a human approve the wording that left the bank?</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Draft.approvedBy and Draft.approvedOn; generated and final text held separately.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Was the partner included by rule or by judgement?</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">MeetingAttendee.addedBy, with the corresponding timeline event.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">When did the client choose, and from where?</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Booking token consumption record and the selection timeline event.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Did every downstream task complete?</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">FulfilmentTask rows with status and external reference per task.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Who could have seen this meeting?</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Dataverse row-level security and Entra group membership at the time, from platform audit.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">12 · Security controls</h2>
+
+  <ul style="margin:0 0 14px;padding-left:22px;font-size:15px;line-height:1.65;color:#2c332e;">
+    <li style="margin-bottom:7px;"><strong>DLP.</strong> The application runs under the bank's existing Power Platform DLP policy; the connector set is fixed and reviewed. No unclassified or third-party connector is permitted in this solution.</li>
+    <li style="margin-bottom:7px;"><strong>Booking tokens.</strong> High-entropy, single-use, time-limited, and stored only as a hash. A token grants sight of one meeting's offered slots and nothing else; failed and repeated attempts are recorded and rate-limited.</li>
+    <li style="margin-bottom:7px;"><strong>No client authentication surface.</strong> The booking page holds no credential and no session; it cannot be used to enumerate clients or meetings.</li>
+    <li style="margin-bottom:7px;"><strong>Least privilege.</strong> Delegated permissions throughout; application permissions only where a background flow genuinely requires them, scoped to the specific operation.</li>
+    <li style="margin-bottom:7px;"><strong>Secrets.</strong> None held by the application. Connections are managed by the platform; there is no key to rotate because there is no bespoke service.</li>
+    <li style="margin-bottom:7px;"><strong>Input handling.</strong> Pasted request text and uploaded message files are treated as untrusted input: sanitised before display and never interpreted as instructions by the application.</li>
+    <li style="margin-bottom:7px;"><strong>Dependency management.</strong> Front-end dependencies are pinned and scanned in the pipeline; the platform manages the rest.</li>
+  </ul>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">13 · Non-functional requirements</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:24%;">Attribute</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:24%;">Target</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Availability resolution</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Under 10 seconds typical</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Narrated progress; slow-response notice past threshold.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Draft generation</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Under 5 seconds typical</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Hard timeout with a deterministic template fallback.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Booking page load</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Under 2 seconds</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Client-facing; must work on a phone on a mobile network.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Availability of service</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Business hours, aligned to Power Platform SLA</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">No bespoke infrastructure to add its own failure modes.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Accessibility</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">WCAG 2.2 AA</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Keyboard-complete journey; visible focus; 44 px minimum targets; the booking page is held to the same standard.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Responsiveness</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Desktop and tablet for staff; mobile for clients</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Rail collapses to a bottom bar below the narrow breakpoint.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Localisation</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">English at pilot</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Offices in scope span multiple locales; time zone handling is required from day one.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Scale</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Pilot cohort, then the RM population</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Graph throttling is the binding constraint; batched and cached reads.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">14 · Environments, ALM and change control</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:22%;">Environment</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:26%;">Data</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Purpose and gate to leave it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Development</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Synthetic only</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Feature work. Leaves on peer code review and passing automated checks.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Test</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Synthetic; masked where realism is needed</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Integration and journey testing. Leaves on test evidence and accessibility check.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">UAT / pilot</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Real, restricted to pilot bankers</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Real bookings with a named cohort. Leaves on business acceptance and control sign-off.</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#12241d;font-weight:600;">Production</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;">Real</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Deployment is automated from source control; no manual change is permitted in the environment.</td></tr>
+    </tbody>
+  </table>
+
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.65;color:#2c332e;">Every change — application code, Dataverse schema, flow definition or Copilot Studio guardrail — is version-controlled, peer-reviewed and deployed through the existing pipeline. The same-day change loop promised in the business case is a consequence of this discipline, not an exception to it: speed comes from automation, not from skipping steps.</p>
+
+  <div style="background:#f6f5f2;border-left:3px solid #1b4d3a;padding:14px 18px;margin:18px 0;break-inside:avoid;">
+    <div style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8a6a2b;margin-bottom:6px;">Note on agent configuration</div>
+    <p style="margin:0;font-size:14.5px;line-height:1.6;color:#2c332e;">Copilot Studio guardrails can be changed without an application release. That is an advantage, but it is also a change-control surface: agent configuration is treated as a controlled artefact, exported to source control, and changed under the same review as code. It must not become a back door around the pipeline.</p>
+  </div>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">15 · Observability and support</h2>
+
+  <ul style="margin:0 0 14px;padding-left:22px;font-size:15px;line-height:1.65;color:#2c332e;">
+    <li style="margin-bottom:7px;"><strong>Journey telemetry.</strong> Step completion, abandonment point, time in each state, extraction correction rate, draft edit rate. Used to drive the weekly change loop, not to monitor individuals.</li>
+    <li style="margin-bottom:7px;"><strong>Operational alerts.</strong> Failed fulfilment tasks, agent timeouts above threshold, Graph throttling, token validation failures.</li>
+    <li style="margin-bottom:7px;"><strong>Support model.</strong> The existing Power Platform application support model. Diagnostics use metadata; access to draft content requires a separate, logged authorisation.</li>
+    <li style="margin-bottom:7px;"><strong>Business monitoring.</strong> The lead-banker view is the operational dashboard for the team — ageing, stuck meetings and volume are visible in the product itself.</li>
+  </ul>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">16 · Open items</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:8%;">Ref</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Item</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:22%;">Owner</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:16%;">Needed by</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">O1</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Confirm retention periods and lawful basis for each processing purpose (§10)</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Data Protection Officer</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Before pilot</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">O2</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Confirm Graph permission scope for reading partner diaries, and the fallback where it is refused</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Identity team</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Before pilot</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">O3</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Agree the notification channel and payload for catering, reception and housekeeping</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Facilities · Technology</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Before pilot</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">O4</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Decide whether the confirmed meeting is written back to the Dynamics client record</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Head of Customer Journeys</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Post-pilot</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">O5</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Define the delegation model for Team Assistants in detail (§9)</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Private Banking operations</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#8a6a2b;">Before pilot</td></tr>
+      <tr><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;font-family:'IBM Plex Mono',monospace;color:#8b938c;">O6</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#2c332e;line-height:1.5;">Set thresholds for extraction correction and draft edit rates that trigger guardrail review (§8)</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Technology lead</td><td style="padding:9px 8px;border-bottom:1px solid #e6e5df;color:#5d6560;">During pilot</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:500;color:#12241d;margin:34px 0 4px;padding-top:16px;border-top:1px solid #e3e2dc;break-after:avoid;">Appendix · Screen inventory</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;">
+    <thead>
+      <tr>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:32%;">Screen</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;width:20%;">Audience</th>
+        <th style="text-align:left;font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#5d6560;border-bottom:1.5px solid #12241d;padding:8px 8px 7px;">Spec</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#12241d;">Meeting book — RM</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Relationship Manager</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;font-family:'IBM Plex Mono',monospace;font-size:11.5px;">§5.1</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#12241d;">Meeting book — team</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Lead Private Banker</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;font-family:'IBM Plex Mono',monospace;font-size:11.5px;">§5.2</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#12241d;">New meeting — step 1, details</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;">RM · Assistant</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;font-family:'IBM Plex Mono',monospace;font-size:11.5px;">§5.3</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#12241d;">New meeting — step 2, times</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;">RM · Assistant</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;font-family:'IBM Plex Mono',monospace;font-size:11.5px;">§5.4</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#12241d;">New meeting — step 3, invitation</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;">RM · Assistant</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;font-family:'IBM Plex Mono',monospace;font-size:11.5px;">§5.5</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#12241d;">Client booking page</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;">Client</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;font-family:'IBM Plex Mono',monospace;font-size:11.5px;">§5.6</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#12241d;">Meeting record and timeline</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;">RM · Lead · Audit</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;font-family:'IBM Plex Mono',monospace;font-size:11.5px;">§5.7</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#12241d;">Exception and reschedule paths</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;">RM</td><td style="padding:8px;border-bottom:1px solid #e6e5df;color:#5d6560;font-family:'IBM Plex Mono',monospace;font-size:11.5px;">§5.8</td></tr>
+    </tbody>
+  </table>
+
+  <p style="margin:22px 0 0;font-size:12.5px;line-height:1.55;color:#8b938c;font-style:italic;">All screens captured from Meeting Orchestrator RM App prototype v5. Where this document and the prototype disagree, this document is the specification and the prototype should be corrected.</p>
+
+</doc-page>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;version&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;v1.0 draft&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Document control&quot;},&quot;status&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Draft&quot;,&quot;For architecture &amp; security review&quot;,&quot;Approved&quot;,&quot;Superseded&quot;],&quot;default&quot;:&quot;For architecture &amp; security review&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Document control&quot;},&quot;classification&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Internal&quot;,&quot;Confidential&quot;,&quot;Restricted&quot;],&quot;default&quot;:&quot;Internal&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Document control&quot;}}">
+class Component extends DCLogic {
+  renderVals(){
+    return {
+      version: this.props.version ?? 'v1.0 draft',
+      status: this.props.status ?? 'For architecture & security review',
+      classification: this.props.classification ?? 'Internal',
+    };
+  }
+}
+</script>
+</body>
+</html>
