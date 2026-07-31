@@ -1,69 +1,36 @@
-Commercial Mindset
+Subject: Draft objectives — my thinking
 
-Demonstrate how I apply a commercial mindset by ensuring AI & Automation engineering capacity is invested in the highest-value opportunities and by creating reusable capabilities that maximise future return on investment.
+Hi Luke,
 
-I will establish transparent capacity planning and resource management across the AI & Automation Platform to ensure engineering investment is aligned to agreed business priorities.
-I will provide trusted input into prioritisation decisions, constructively challenging or deferring requests where value, feasibility or strategic alignment is unclear.
-I will promote the development and adoption of reusable AI & Automation capabilities and delivery patterns that reduce the cost and effort of future delivery.
-I will maintain visibility of platform demand against available capacity, enabling informed planning and investment decisions.
- 
+Following your ask to think about where my technical capability, leadership and strategic input hold most influence, here's where I've landed.
 
- 
+My starting point is that the platform is pre-first-delivery, so the highest-value thing I can do this year is make the first production delivery unambiguously good and define the standard everything after it is held to. I've written my objectives to sit under yours rather than beside them — you hold the portfolio, capacity and team; I supply the technical substance and the first proof point.
 
-Customer Journeys
+Three threads run through all of it:
 
-Demonstrate how I proactively develop and share my understanding of Customer Journeys beyond the boundaries of my role, ensuring AI & Automation opportunities are aligned to meaningful business outcomes.
+1. Land the first production-grade AI solution, built deliberately as the pattern the team reuses.
+2. Define what production-ready means for AI outputs specifically — evaluation, retrieval quality, regression, the bar for go-live. We have engineering quality controls, but not a shared definition of good for the AI itself, and I think that's what's showing up in the feedback on work currently in test.
+3. Bring engineering and commercial judgement into use-case selection, so early capacity goes to a small number of things that succeed.
 
-I will build strong relationships across Customer Journeys, Operations and Business teams to deepen my understanding of end-to-end processes and pain points.
-I will ensure AI & Automation initiatives are clearly aligned to measurable business outcomes and customer value.
-I will provide both engineering and delivery expertise to support the assessment of AI use cases, ensuring they are scalable, supportable and aligned to strategic objectives.
-I will actively contribute to discussions on how AI & Automation can support the evolution of Customer Journeys and wider business priorities.
- 
+Draft objectives:
 
- 
+Commercial Mindset — Contribute engineering and commercial assessment of proposed use cases, including whether the process should be simplified before anything is built. Recommend deferral where value or feasibility is unclear, with the reasoning shared. Work with the team on reusable patterns and reference architectures so future delivery starts from a proven baseline.
 
-Engineering Quality
+Customer Journeys — Work in an embedded, forward-deployed way with the business areas we support, building alongside users rather than to a handed-over specification. Run discovery with Operations and front office to understand where effort and risk actually sit. Ensure the initiatives I work on have a named business owner, a defined outcome and an agreed measure before build.
 
-Demonstrate how I improve the quality, predictability and scalability of engineering across the AI & Automation Platform.
+Engineering Quality — Develop and publish the AI quality and evaluation standard with risk and compliance. Build evaluation and observability as shared platform capabilities rather than per-project effort, giving risk, compliance and audit a single evidence base. Support colleagues in applying the standard to in-flight work. Apply AI-assisted development practices in delivery and share what works.
 
-I will support AI-assisted development practices across the SDLC, including appropriate use of tools such as Copilot, testing acceleration and code review support, delivering measurable efficiency improvements.
-I will improve delivery predictability through effective planning, estimation and management of dependencies.
-I will ensure all solutions are delivered with appropriate observability, operational readiness and support arrangements.
-I will reduce production defects and operational incidents through robust quality controls, testing practices and pre-release governance.
- 
+Productivity & High Performance Culture — Ensure every solution I contribute to can be supported and changed by at least two engineers, through architecture decision records, runbooks and a named second engineer with hands-on familiarity. Bring engineers directly into evaluation, retrieval design and tuning so these become team capabilities.
 
- 
+Simplification & Automation — Lead delivery of the first production-grade AI solution end to end, with a defined business outcome and audit-ready controls. Work with the central AI function and business owners to take it through governance into operational adoption. Ensure benefits are measured and evidenced afterwards, including where they differ from the business case.
 
-Productivity & High Performance Culture
+T&T Strategy Delivery — Help define and pilot the forward-deployed engineering operating model: engagement shape, the graduation bar from embedded prototype to supported service, and handover arrangements, so proximity to the business doesn't come at the cost of supportability. Provide engineering input into the central AI function's governance and prioritisation on feasibility, supportability, cost and risk. Deliver against commitments and raise variance in advance.
 
-Identify opportunities to enhance productivity and build a high-performing AI & Automation Platform through capability development, talent retention and sustainable team design.
+On the forward-deployed model specifically — I've worked this way before, embedded across business units at Close Brothers and running discovery directly with the exec at KIO. The tension to design around is that it runs on proximity and speed while the bank runs on control and supportability. My view is the platform is what makes it safe: environment templates, pre-approved patterns and the evaluation harness are what let someone build fast inside a business function without it becoming shadow IT.
 
-I will reduce dependency on key individuals by improving capability coverage across critical technologies and solutions.
-I will create an environment that attracts, develops and retains high-performing talent.
-I will foster a culture of continuous improvement, innovation and professional growth.
-I will harness emerging technology in partnership with my engineers to improve productivity across the department.
- 
+One thing I'd like to discuss rather than assume: alongside delivery, I'd like a defined contribution to AI product and strategy to be an explicit part of the role — the capability roadmap, build versus buy, and product framing of use cases before build. Happy to talk it through.
 
- 
+I've kept measures out of this to stay readable — I have a version with those attached if useful.
 
-Simplification & Automation
-
-Provide examples of how I have contributed to simplifying processes and improving efficiency across the bank through AI & Automation.
-
-I will deliver AI & Automation solutions that generate measurable business impact through reduced manual effort, improved colleague productivity or strengthened customer relationship.
-I will support the successful progression of AI use cases from conception through governance, engineering delivery and operational adoption.
-I will ensure agreed business benefits are measured and evidenced following implementation.
-I will establish delivery approaches that enable future automation opportunities to be delivered more effectively and efficiently.
- 
-
- 
-
-T&T Strategy Delivery
-
-Demonstrate how I actively support delivery of the AI and Technology strategy through trusted engineering leadership, predictable delivery and effective collaboration with the central AI function.
-
-I will establish the AI & Automation Platform as a trusted engineering delivery partner across the organisation.
-I will work collaboratively with Cali Wood's AI function, providing engineering input into governance, prioritisation and technology direction.
-I will support the establishment of a clear and repeatable pathway from idea conception, through AI governance and prioritisation, to engineering delivery and operational adoption.
-I will deliver predictable outcomes against agreed commitments, maintaining stakeholder confidence in estimates, prioritisation decisions and delivery performance.
-I will demonstrate measurable business impact from AI & Automation investments while maintaining stakeholder trust and platform credibility.
+Thanks,
+Praveen
