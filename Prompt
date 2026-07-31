@@ -1,0 +1,74 @@
+# Generative page prompt — Meeting Orchestrator (v5 parity spike)
+
+Paste into **Add page → Describe a page** in the model-driven app designer. Run it in three passes: Pass 1 (base page), then Pass 2 and Pass 3 as refinement prompts. Trying to get all of it in one prompt tends to lose the detail.
+
+---
+
+## PASS 1 — the page
+
+Build a page called **Book a client meeting** for private-bank relationship managers. It replaces a six-step manual booking process with three steps on one page. The user must never scroll back up to fix something, and never leave this page to finish the job.
+
+**Data (Dataverse):** Meeting, Meeting Type (option set, searchable — there are ~40), Contact (clients), Account, Associated Party, User (colleague directory), Building, Room, Catering Order, AI Extraction, Audit Event.
+
+**Layout:** a single scrolling page, max width about 1100px, with a persistent action bar pinned to the bottom of the viewport. Three numbered stages shown as a slim progress strip at the top: 1 Details, 2 Time, 3 Confirm. Selecting a stage scrolls to it; stages 2 and 3 stay disabled until the stage before is valid.
+
+### Stage 1 — Details
+
+Show only three fields by default:
+
+- **Customer** — type-ahead search over Contacts in the current user's own book. Results show name, segment and last-meeting date. Below the results, a quieter link "Search all clients" which, when used, shows an amber inline notice that the search will be logged to the access audit, and requires a reason to be picked before results appear.
+- **Meeting type** — a searchable dropdown over the Meeting Type option set. Show the option-set name in small monospace text at the bottom of the dropdown so the user knows where the values come from.
+- **When** — three choices: This week, Next week, Pick a date range.
+
+Under those, a single text button **"Change the details"** which expands to reveal: Duration, Location, Building, Format (In person / Video call), and Catering. Collapsed by default. If any revealed field has been changed from its default, show a small count next to the button.
+
+Also in stage 1:
+
+- An **email drop zone** at the top: "Drop the client's email here" accepting .eml and .txt. While processing, show a slim progress line, not a blocking spinner — the rest of the page stays usable and fields fill in as they resolve.
+- **People** — attendee chips with avatars and initials. An "Add people" button opens a searchable modal over the colleague directory. An "Associated parties" button opens a second modal listing the selected client's associated parties from Dataverse.
+
+### Stage 2 — Time
+
+A ranked list of three to five suggested slots, each as a selectable card showing day, date, time, room name and building, and a one-line reason ("All five attendees free; boardroom available"). Selected cards are visibly chosen; more than one can be selected to send the client options.
+
+Below the list, three actions: **Widen the window**, **Make the guest list smaller**, **Change the details**.
+
+### Stage 3 — Confirm
+
+A read-only summary of everything, grouped: Client, Meeting, People, Room, Catering. Each group has an inline Edit link that scrolls back to the relevant field.
+
+### The action bar (pinned, always visible)
+
+Left: a one-line summary of current state ("Hana Voss · Portfolio review · Thu 31 Jul, 10:00"). Right: the primary button, whose label changes by stage — **Confirm details & find times** → **Choose these times** → **Send to client**. When required fields are missing, the button is disabled and the bar states plainly what is missing ("Add a customer and a meeting type").
+
+**Visual style:** match the model-driven app shell using Fluent UI 9. Restrained and professional — private banking, not consumer. White cards on a warm off-white background, one dark green accent for primary actions, one muted gold reserved for AI and warnings. No gradients, no emoji, no decorative icons. Body text 13–14px, generous line height, comfortable spacing.
+
+---
+
+## PASS 2 — AI provenance and attestation
+
+This is the important part of the page. Refine it as follows.
+
+When the email has been processed, every field the AI filled shows a small gold **AI** chip next to its label. Low-confidence fields show **AI · CHECK** instead, and for a low-confidence meeting type the dropdown opens rather than pre-selecting a value.
+
+Hovering or tapping an AI chip reveals the evidence behind it: either the phrase quoted from the email that produced the value ("over a working lunch"), or the rule that produced it ("Portfolio reviews are 90 minutes by policy"). Attendee suggestions are split into two groups by where they came from — those from meeting-type policy, and those from email keywords, with the matched phrase quoted for each. Each suggested attendee can be accepted or dismissed individually.
+
+AI values are **pending, not committed**. Nothing is written to Dataverse until the user attests. In the action bar, while AI values are pending, show an attestation line next to the primary button: "I've checked the details AI filled in." The primary button reads **Confirm details & find times** and cannot proceed until the attestation is acknowledged. Once attested, the AI chips change to a quiet confirmed state.
+
+On commit, write the Meeting row and one AI Extraction row recording: the extracted values, the source phrase for each, which fields the user changed, and the attesting user and timestamp.
+
+---
+
+## PASS 3 — rules and edge cases
+
+Apply these behaviours:
+
+- **Duration** defaults from meeting type (portfolio review 90 minutes, introduction 60, signing 30) and is overridable.
+- **Format** of Video call clears and hides Catering entirely, and removes the building and room requirement.
+- **Catering** defaults by choice: Tea & coffee 30 minutes service, Working lunch 120, Breakfast 45. All editable. If service time exceeds the meeting length, show an amber inline warning with two one-click fixes: "Extend the meeting to N minutes" or "Trim service to N minutes". Never block on this — warn and offer.
+- **Dietary requirements** detected from the email attach to the catering order with the phrase quoted.
+- **Room turnaround**: in-person meetings need 15 minutes either side; video calls need none. Slot suggestions must respect this.
+- **Validation** is stated in plain language in the action bar, never as red field-level errors.
+- Respect Dataverse security throughout — the page must not read beyond the user's permissions, and the break-glass client search must write an Audit Event row.
+
+**For the spike:** if Microsoft Graph free/busy is not yet wired up, generate the slot suggestions from static sample data so the interaction can be judged. The point of this build is to test whether the layout density, the pending-versus-confirmed field styling, and the slot picker survive in a generative page.
