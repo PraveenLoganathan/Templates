@@ -9,28 +9,28 @@ My starting point is that the platform is pre-first-delivery, so the highest-val
 Three threads run through all of it:
 
 1. Land the first production-grade AI solution, built deliberately as the pattern the team reuses.
-2. Define what production-ready means for AI outputs specifically — evaluation, retrieval quality, regression, the bar for go-live. We have engineering quality controls, but not a shared definition of good for the AI itself, and I think that's what's showing up in the feedback on work currently in test.
+2. Define what production-ready means for AI specifically — evaluation, retrieval quality, regression, and how sources and confidence are surfaced to users. We have engineering quality controls, but not a shared definition of good for the AI itself. My read is that adoption problems with these solutions are usually as much about whether people can tell when to trust an answer as about the model underneath.
 3. Bring engineering and commercial judgement into use-case selection, so early capacity goes to a small number of things that succeed.
 
 Draft objectives:
 
-Commercial Mindset — Contribute engineering and commercial assessment of proposed use cases, including whether the process should be simplified before anything is built. Recommend deferral where value or feasibility is unclear, with the reasoning shared. Work with the team on reusable patterns and reference architectures so future delivery starts from a proven baseline.
+Commercial Mindset — Contribute engineering and commercial assessment of proposed use cases, including whether the process should be simplified before anything is built. Recommend deferral where value or feasibility is unclear, with the reasoning shared. Work with the team on reusable patterns and reference architectures so future delivery starts from a proven baseline. Establish cost visibility per use case so decisions can be made on cost per outcome.
 
-Customer Journeys — Work in an embedded, forward-deployed way with the business areas we support, building alongside users rather than to a handed-over specification. Run discovery with Operations and front office to understand where effort and risk actually sit. Ensure the initiatives I work on have a named business owner, a defined outcome and an agreed measure before build.
+Customer Journeys — Work alongside the business areas we support rather than at arm's length, using rapid wireframes and working prototypes to test direction with users early and correct course while it's still cheap. Iterate in short, visible cycles with design, journey optimisation and delivery colleagues. Run discovery with Operations and front office to understand where effort and risk actually sit. Ensure the initiatives I work on have a named business owner, a defined outcome and an agreed measure before build.
 
-Engineering Quality — Develop and publish the AI quality and evaluation standard with risk and compliance. Build evaluation and observability as shared platform capabilities rather than per-project effort, giving risk, compliance and audit a single evidence base. Support colleagues in applying the standard to in-flight work. Apply AI-assisted development practices in delivery and share what works.
+Engineering Quality — Develop and publish the AI quality and evaluation standard with risk and compliance. Ensure solutions are assessed for usability and trust alongside technical accuracy. Build evaluation and observability as shared platform capabilities rather than per-project effort, giving risk, compliance and audit a single evidence base. Apply AI-assisted development practices in delivery and share what works.
 
 Productivity & High Performance Culture — Ensure every solution I contribute to can be supported and changed by at least two engineers, through architecture decision records, runbooks and a named second engineer with hands-on familiarity. Bring engineers directly into evaluation, retrieval design and tuning so these become team capabilities.
 
-Simplification & Automation — Lead delivery of the first production-grade AI solution end to end, with a defined business outcome and audit-ready controls. Work with the central AI function and business owners to take it through governance into operational adoption. Ensure benefits are measured and evidenced afterwards, including where they differ from the business case.
+Simplification & Automation — Lead delivery of the first production-grade AI solution end to end, with a defined business outcome and audit-ready controls. Define a genuinely shippable MVP for each initiative and extend based on observed use. Work with the central AI function and business owners to take use cases through governance into operational adoption, with benefits measured afterwards.
 
-T&T Strategy Delivery — Help define and pilot the forward-deployed engineering operating model: engagement shape, the graduation bar from embedded prototype to supported service, and handover arrangements, so proximity to the business doesn't come at the cost of supportability. Provide engineering input into the central AI function's governance and prioritisation on feasibility, supportability, cost and risk. Deliver against commitments and raise variance in advance.
+T&T Strategy Delivery — Help define and pilot the forward-deployed engineering operating model: engagement shape, the graduation bar from prototype to supported service, and handover arrangements. Provide engineering input into the central AI function's governance and prioritisation on feasibility, supportability, cost and risk. Deliver against commitments and raise variance in advance.
 
-On the forward-deployed model specifically — I've worked this way before, embedded across business units at Close Brothers and running discovery directly with the exec at KIO. The tension to design around is that it runs on proximity and speed while the bank runs on control and supportability. My view is the platform is what makes it safe: environment templates, pre-approved patterns and the evaluation harness are what let someone build fast inside a business function without it becoming shadow IT.
+On the operating model — I've worked this way before, embedded across five business units at Close Brothers and running discovery directly with the exec at KIO, where I also led the wireframing and interface work for the risk application. The tension to design around is that it runs on proximity and speed while the bank runs on control and supportability. My view is the platform is what makes it safe: environment templates, pre-approved patterns and a shared evaluation harness are what let someone build quickly inside a business function without it becoming shadow IT. The graduation bar and handover are the part worth getting right.
 
 One thing I'd like to discuss rather than assume: alongside delivery, I'd like a defined contribution to AI product and strategy to be an explicit part of the role — the capability roadmap, build versus buy, and product framing of use cases before build. Happy to talk it through.
 
-I've kept measures out of this to stay readable — I have a version with those attached if useful.
+Full version with measures attached.
 
 Thanks,
 Praveen
