@@ -1901,8 +1901,9 @@
         <button onClick="{{ goCreate }}" style="all:unset;cursor:pointer;position:relative;display:flex;align-items:center;gap:11px;padding:12px 14px;min-height:44px;border-radius:8px;font-size:15px;font-weight:600;color:#12241d;"><sc-if value="{{ navCreate }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:0;background:#e8efe9;border-radius:8px;"></span><span style="position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:#1b4d3a;"></span></sc-if><span style="position:relative;display:flex;align-items:center;gap:11px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}"><span style="white-space:nowrap;">New meeting</span></sc-if></span></button>
         <div style="margin-top:auto;display:flex;flex-direction:column;gap:5px;padding:12px 8px 6px;border-top:1px solid #e9e8e2;">
           <sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}"><div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8b938c;padding:0 6px 2px;white-space:nowrap;">VIEW AS</div></sc-if>
-          <button onClick="{{ setRoleRm }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px;min-height:44px;border-radius:8px;background:{{ roleRmBg }};"><span style="width:28px;height:28px;border-radius:50%;background:#1b4d3a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:0 0 auto;">RA</span><sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}"><span style="flex:1;min-width:0;"><span style="display:block;font-size:13px;font-weight:600;color:#3a423c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Rachel Adeyemi</span><span style="display:block;font-size:11px;color:#8b938c;">Private Banker</span></span></sc-if></button>
-          <button onClick="{{ setRoleLead }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px;min-height:44px;border-radius:8px;background:{{ roleLeadBg }};"><span style="width:28px;height:28px;border-radius:50%;background:#8a6a2b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:0 0 auto;">EW</span><sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}"><span style="flex:1;min-width:0;"><span style="display:block;font-size:13px;font-weight:600;color:#3a423c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Eleanor Whitmore</span><span style="display:block;font-size:11px;color:#8b938c;">Lead Private Banker</span></span></sc-if></button>
+          <button onClick="{{ viewAsLeon }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px;min-height:44px;border-radius:8px;background:{{ bgLeon }};"><span style="width:28px;height:28px;border-radius:50%;background:#1b4d3a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:0 0 auto;">LJ</span><sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}"><span style="flex:1;min-width:0;"><span style="display:block;font-size:13px;font-weight:600;color:#3a423c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Leon Jurkovic</span><span style="display:block;font-size:11px;color:#8b938c;">Assistant Private Banker</span></span></sc-if></button>
+          <button onClick="{{ viewAsLucy }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px;min-height:44px;border-radius:8px;background:{{ bgLucy }};"><span style="width:28px;height:28px;border-radius:50%;background:#1b4d3a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:0 0 auto;">LR</span><sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}"><span style="flex:1;min-width:0;"><span style="display:block;font-size:13px;font-weight:600;color:#3a423c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Lucy Robertson</span><span style="display:block;font-size:11px;color:#8b938c;">Assistant Private Banker</span></span></sc-if></button>
+          <button onClick="{{ setRoleLead }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px;min-height:44px;border-radius:8px;background:{{ roleLeadBg }};"><span style="width:28px;height:28px;border-radius:50%;background:#8a6a2b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:0 0 auto;">BM</span><sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}"><span style="flex:1;min-width:0;"><span style="display:block;font-size:13px;font-weight:600;color:#3a423c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Billy Moore</span><span style="display:block;font-size:11px;color:#8b938c;">Lead Private Banker</span></span></sc-if></button>
         </div>
       </div>
 
@@ -1913,7 +1914,7 @@
         <sc-if value="{{ roleRm }}" hint-placeholder-val="{{ true }}">
         <div class="mo-pad" style="padding:28px 32px 40px;max-width:780px;margin:0 auto;color:#12241d;">
           <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;margin-bottom:26px;">
-            <div><div class="mo-h1" style="font-family:'Newsreader',Georgia,serif;font-size:29px;font-weight:500;letter-spacing:-.01em;">Good morning, Rachel</div><div style="font-size:15px;color:#5d6560;margin-top:3px;">Here's what needs you</div></div>
+            <div><div class="mo-h1" style="font-family:'Newsreader',Georgia,serif;font-size:29px;font-weight:500;letter-spacing:-.01em;">Good morning, {{ meFirst }}</div><div style="font-size:15px;color:#5d6560;margin-top:3px;">Here's what needs you</div></div>
             <button onClick="{{ goCreate }}" style="all:unset;cursor:pointer;white-space:nowrap;background:#1b4d3a;color:#fff;font-size:15px;font-weight:600;padding:12px 20px;border-radius:8px;display:inline-flex;align-items:center;gap:9px;" style-hover="background:#143a2b;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New meeting</button>
           </div>
           <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8b938c;margin-bottom:10px;">Needs attention</div>
@@ -1948,7 +1949,7 @@
 
         <sc-if value="{{ roleLead }}" hint-placeholder-val="{{ false }}">
         <div class="mo-pad" style="padding:28px 32px 40px;max-width:1000px;margin:0 auto;color:#12241d;">
-          <div style="margin-bottom:24px;"><div class="mo-h1" style="font-family:'Newsreader',Georgia,serif;font-size:29px;font-weight:500;letter-spacing:-.01em;">Good morning, Eleanor</div><div style="font-size:15px;color:#5d6560;margin-top:3px;">The team's meeting book — where work is waiting</div></div>
+          <div style="margin-bottom:24px;"><div class="mo-h1" style="font-family:'Newsreader',Georgia,serif;font-size:29px;font-weight:500;letter-spacing:-.01em;">Good morning, Billy</div><div style="font-size:15px;color:#5d6560;margin-top:3px;">The team's meeting book — where work is waiting</div></div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:12px;margin-bottom:24px;">
             <sc-for list="{{ metricCards }}" as="mc" hint-placeholder-count="4">
             <button onClick="{{ mc.pick }}" style="all:unset;box-sizing:border-box;cursor:{{ mc.cursor }};background:{{ mc.bg }};border:1px solid {{ mc.border }};border-radius:10px;padding:16px 18px;">
@@ -2011,7 +2012,7 @@
               <span style="font-size:14px;color:#5d6560;">Start from the customer's email — the form fills itself in for your review.</span>
             </div>
             <div style="display:flex;align-items:center;justify-content:center;gap:10px;border:1.5px dashed #d3c9ae;border-radius:8px;padding:13px;margin-bottom:10px;background:#fdfcf8;color:#5d6560;font-size:13px;text-align:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span>Drag &amp; drop an <strong>.eml</strong>, <strong>.msg</strong> or <strong>.txt</strong> file here, <label for="mo-eml" style="color:#1b4d3a;font-weight:600;text-decoration:underline;cursor:pointer;">choose a file</label>, or paste the text below</span><input id="mo-eml" type="file" accept=".eml,.msg,.txt" onChange="{{ onIntakeFile }}" style="display:none;"></div>
-            <textarea onInput="{{ onIntakeInput }}" value="{{ intakeText }}" placeholder="e.g. Hi Rachel — Hana asked for an estate planning chat in Geneva, an hour or so…" style="width:100%;min-height:86px;border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.5;color:#12241d;resize:vertical;"></textarea>
+            <textarea onInput="{{ onIntakeInput }}" value="{{ intakeText }}" placeholder="e.g. Hana asked for an estate planning chat at Fleet St, an hour or so…" style="width:100%;min-height:86px;border:1px solid #d5d3ca;border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.5;color:#12241d;resize:vertical;"></textarea>
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center;">
               <button onClick="{{ extractIntake }}" style="all:unset;cursor:{{ extractCursor }};background:{{ extractBg }};color:#fff;font-size:14px;font-weight:600;padding:10px 20px;border-radius:8px;opacity:{{ extractOpacity }};">Extract details</button>
               <button onClick="{{ sampleIntake }}" style="all:unset;cursor:pointer;color:#1b4d3a;font-size:14px;font-weight:600;padding:10px 14px;">Try a sample email</button>
@@ -2086,6 +2087,21 @@
                 <sc-if value="{{ crmDone }}" hint-placeholder-val="{{ false }}">
                 <div style="margin-top:12px;padding-top:12px;border-top:1px solid #f1f0ec;display:flex;flex-direction:column;gap:7px;">
                   <sc-for list="{{ crmFacts }}" as="f" hint-placeholder-count="2"><div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:{{ f.fg }};line-height:1.5;"><span style="flex:0 0 auto;font-weight:700;">{{ f.mark }}</span><span>{{ f.text }}</span></div></sc-for>
+                  <sc-if value="{{ custHasEmails }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:10px;padding-top:12px;border-top:1px solid #f1f0ec;">
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;">
+                      <span style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8b938c;">EMAIL TO USE</span>
+                      <span style="font-size:12px;color:#8b938c;">{{ custEmailCountNote }}</span>
+                    </div>
+                    <div style="position:relative;margin-top:8px;">
+                      <button onClick="{{ toggleCustEmailMenu }}" style="all:unset;box-sizing:border-box;width:100%;cursor:pointer;background:#fbfaf7;border:1px solid {{ custEmailBorder }};border-radius:8px;padding:10px 12px;min-height:44px;display:flex;gap:10px;align-items:center;">
+                        <span style="flex:1;min-width:0;"><span style="display:block;font-size:14px;color:#12241d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ custEmail }}</span><span style="display:block;font:500 11px 'IBM Plex Mono',monospace;color:#8b938c;margin-top:2px;">{{ custEmailLabel }}</span></span>
+                        <span style="color:#8b938c;flex:0 0 auto;">▾</span>
+                      </button>
+                      <sc-if value="{{ menuCustEmail }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;z-index:30;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #d5d3ca;border-radius:8px;box-shadow:0 12px 30px rgba(18,36,29,.14);overflow:hidden;"><sc-for list="{{ custEmailOptions }}" as="em" hint-placeholder-count="2"><button onClick="{{ em.pick }}" style="all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;gap:10px;align-items:center;padding:11px 13px;border-bottom:1px solid #f6f5f2;background:{{ em.bg }};" style-hover="background:#fbfaf7;"><span style="flex:1;min-width:0;"><span style="display:block;font-size:14px;color:#12241d;">{{ em.addr }}</span><span style="display:block;font:500 11px 'IBM Plex Mono',monospace;color:#8b938c;margin-top:2px;">{{ em.label }}</span></span><sc-if value="{{ em.selected }}" hint-placeholder-val="{{ false }}"><span style="color:#1b4d3a;font-weight:700;flex:0 0 auto;">✓</span></sc-if></button></sc-for><div style="padding:9px 13px;background:#fbfaf7;border-top:1px solid #f1f0ec;font:500 11px 'IBM Plex Mono',monospace;color:#8b938c;">Contact emails · Dynamics 365</div></div></sc-if>
+                    </div>
+                  </div>
+                  </sc-if>
                   <sc-if value="{{ custRestricted }}" hint-placeholder-val="{{ false }}">
                   <div style="margin-top:8px;background:#fdfaf2;border:1px solid #e2cfa6;border-radius:8px;padding:12px 14px;">
                     <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;"><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a6a2b;background:#f7f0e2;border:1px solid #e2cfa6;border-radius:4px;padding:3px 7px;">RESTRICTED VIEW</span><span style="font:500 11px 'IBM Plex Mono',monospace;color:#8b938c;">{{ restrictedAudit }}</span></div>
@@ -2138,10 +2154,11 @@
             </div>
 
             <!-- ATTENDEES -->
-            <div style="grid-column:1/-1;"><label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#5d6560;">Colleagues joining <sc-if value="{{ aiAtt }}" hint-placeholder-val="{{ false }}"><span style="font:600 9px 'IBM Plex Mono',monospace;color:#8a6a2b;background:#f7f0e2;border:1px solid #e2cfa6;border-radius:3px;padding:2px 5px;letter-spacing:.06em;">{{ aiAttText }}</span></sc-if></label>
+            <div style="grid-column:1/-1;"><label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#5d6560;">Attendees <sc-if value="{{ aiAtt }}" hint-placeholder-val="{{ false }}"><span style="font:600 9px 'IBM Plex Mono',monospace;color:#8a6a2b;background:#f7f0e2;border:1px solid #e2cfa6;border-radius:3px;padding:2px 5px;letter-spacing:.06em;">{{ aiAttText }}</span></sc-if></label>
               <div style="position:relative;margin-top:6px;">
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-                  <sc-for list="{{ attendees }}" as="att" hint-placeholder-count="1"><span style="display:inline-flex;align-items:center;gap:8px;background:#f1f0ec;border:1px solid #e0dfd8;border-radius:999px;padding:5px 6px;font-size:14px;"><span style="width:24px;height:24px;border-radius:50%;background:{{ att.color }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:10px;">{{ att.ini }}</span>{{ att.name }}<sc-if value="{{ att.fixed }}" hint-placeholder-val="{{ false }}"><span style="font:600 9px 'IBM Plex Mono',monospace;color:#8b938c;padding-right:6px;">YOU</span></sc-if><sc-if value="{{ att.required }}" hint-placeholder-val="{{ false }}"><span title="Required — remove via the Partner toggle" style="font:600 9px 'IBM Plex Mono',monospace;color:#8a6a2b;padding-right:6px;">REQUIRED</span></sc-if><sc-if value="{{ att.removable }}" hint-placeholder-val="{{ true }}"><button onClick="{{ att.remove }}" aria-label="Remove attendee" style="all:unset;cursor:pointer;color:#5d6560;padding:0 6px;font-size:15px;">×</button></sc-if></span></sc-for>
+                  <sc-if value="{{ showCustChip }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:8px;background:#eef2ef;border:1px solid #cfdbd3;border-radius:999px;padding:5px 12px 5px 6px;font-size:14px;"><span style="width:24px;height:24px;border-radius:50%;background:#12241d;color:#e3cd9c;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:10px;flex:0 0 auto;">{{ custChipIni }}</span>{{ custChipName }}<span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#1b4d3a;">CUSTOMER</span></span></sc-if>
+              <sc-for list="{{ attendees }}" as="att" hint-placeholder-count="1"><span style="display:inline-flex;align-items:center;gap:8px;background:#f1f0ec;border:1px solid #e0dfd8;border-radius:999px;padding:5px 6px;font-size:14px;"><span style="width:24px;height:24px;border-radius:50%;background:{{ att.color }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:10px;">{{ att.ini }}</span>{{ att.name }}<sc-if value="{{ att.fixed }}" hint-placeholder-val="{{ false }}"><span style="font:600 9px 'IBM Plex Mono',monospace;color:#8b938c;padding-right:6px;">YOU</span></sc-if><sc-if value="{{ att.required }}" hint-placeholder-val="{{ false }}"><span title="Required — remove via the Partner toggle" style="font:600 9px 'IBM Plex Mono',monospace;color:#8a6a2b;padding-right:6px;">REQUIRED</span></sc-if><sc-if value="{{ att.removable }}" hint-placeholder-val="{{ true }}"><button onClick="{{ att.remove }}" aria-label="Remove attendee" style="all:unset;cursor:pointer;color:#5d6560;padding:0 6px;font-size:15px;">×</button></sc-if></span></sc-for>
                   <sc-for list="{{ groupChips }}" as="g" hint-placeholder-count="0"><span style="display:inline-flex;align-items:center;gap:8px;background:#f3eee4;border:1px solid #e2d6bf;border-radius:999px;padding:5px 6px;font-size:14px;"><span style="width:24px;height:24px;border-radius:50%;background:{{ g.color }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:9px;">{{ g.ini }}</span>{{ g.name }}<span style="font:600 9px 'IBM Plex Mono',monospace;color:#8a6a2b;padding-left:2px;">GROUP</span><button onClick="{{ g.remove }}" aria-label="Remove group" style="all:unset;cursor:pointer;color:#5d6560;padding:0 6px;font-size:15px;">×</button></span></sc-for>
                   <button onClick="{{ togglePeople }}" style="all:unset;cursor:pointer;background:#fff;border:1px solid #d5d3ca;border-radius:999px;padding:8px 14px;font-size:14px;color:#1b4d3a;font-weight:600;">＋ Add people</button>
                   <sc-if value="{{ partiesAvailable }}" hint-placeholder-val="{{ false }}"><button onClick="{{ toggleParties }}" style="all:unset;cursor:pointer;background:#fff;border:1px solid #d5d3ca;border-radius:999px;padding:8px 14px;font-size:14px;color:#1b4d3a;font-weight:600;">⇲ Others on their record<sc-if value="{{ hasGuests }}" hint-placeholder-val="{{ false }}"><span style="font:600 10px 'IBM Plex Mono',monospace;color:#8a6a2b;padding-left:7px;">{{ guestCount }}</span></sc-if></button></sc-if>
@@ -2409,7 +2426,7 @@
               <span style="font-size:13px;color:#8a6a2b;">{{ draftStatusText }}</span>
             </div>
             <div style="padding:20px;">
-              <div style="display:flex;gap:10px;align-items:center;font-size:14px;color:#5d6560;margin-bottom:8px;"><span style="width:52px;color:#8b938c;flex:0 0 auto;">To</span><input onInput="{{ onCustEmailInput }}" value="{{ custEmail }}" style="flex:1;min-width:0;border:none;font-size:14px;color:#12241d;padding:4px 0;background:transparent;outline:none;border-bottom:1px dashed #d5d3ca;"></div>
+              <div style="position:relative;display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:14px;color:#5d6560;margin-bottom:8px;"><span style="width:52px;color:#8b938c;flex:0 0 auto;">To</span><input onInput="{{ onCustEmailInput }}" value="{{ custEmail }}" style="flex:1;min-width:120px;border:none;font-size:14px;color:#12241d;padding:4px 0;background:transparent;outline:none;border-bottom:1px dashed #d5d3ca;"><sc-if value="{{ custHasEmails }}" hint-placeholder-val="{{ false }}"><button onClick="{{ toggleComposeEmailMenu }}" style="all:unset;cursor:pointer;flex:0 0 auto;font-size:12px;font-weight:600;color:#1b4d3a;padding:6px 4px;">{{ custEmailLabel }} ▾</button></sc-if><sc-if value="{{ menuComposeEmail }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;z-index:30;top:calc(100% + 4px);right:0;min-width:300px;max-width:100%;background:#fff;border:1px solid #d5d3ca;border-radius:8px;box-shadow:0 12px 30px rgba(18,36,29,.14);overflow:hidden;"><sc-for list="{{ custEmailOptions }}" as="em" hint-placeholder-count="2"><button onClick="{{ em.pick }}" style="all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;gap:10px;align-items:center;padding:11px 13px;border-bottom:1px solid #f6f5f2;background:{{ em.bg }};" style-hover="background:#fbfaf7;"><span style="flex:1;min-width:0;"><span style="display:block;font-size:14px;color:#12241d;">{{ em.addr }}</span><span style="display:block;font:500 11px 'IBM Plex Mono',monospace;color:#8b938c;margin-top:2px;">{{ em.label }}</span></span><sc-if value="{{ em.selected }}" hint-placeholder-val="{{ false }}"><span style="color:#1b4d3a;font-weight:700;flex:0 0 auto;">✓</span></sc-if></button></sc-for><div style="padding:9px 13px;background:#fbfaf7;border-top:1px solid #f1f0ec;font:500 11px 'IBM Plex Mono',monospace;color:#8b938c;">Contact emails · Dynamics 365</div></div></sc-if></div>
               <div style="display:flex;gap:10px;align-items:center;font-size:14px;color:#5d6560;margin-bottom:14px;border-bottom:1px solid #f1f0ec;padding-bottom:14px;"><span style="width:52px;color:#8b938c;flex:0 0 auto;">Subject</span><input onInput="{{ onSubjectInput }}" value="{{ emailSubject }}" style="flex:1;min-width:0;border:none;font-size:14px;color:#12241d;padding:4px 0;background:transparent;outline:none;border-bottom:1px dashed #d5d3ca;"></div>
 
               <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;">
@@ -2505,7 +2522,7 @@
             <span style="font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.06em;color:{{ detailStatusFg }};background:{{ detailStatusBg }};border-radius:999px;padding:8px 16px;">{{ detailStatus }}</span>
           </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:24px;">
-            <div style="background:#fff;border:1px solid #e3e2dc;border-radius:10px;padding:20px;"><div style="font:600 10px 'IBM Plex Mono',monospace;color:#8b938c;letter-spacing:.1em;margin-bottom:14px;">ATTENDEES</div><div style="display:flex;flex-direction:column;gap:10px;font-size:15px;"><div style="display:flex;justify-content:space-between;gap:10px;">{{ detailCustomerName }} <span style="color:#8b938c;">Customer</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Rachel Adeyemi <span style="color:#8b938c;">Private Banker</span></div><div style="display:flex;justify-content:space-between;gap:10px;">James Whitlock <span style="color:#8b938c;">Analyst</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Sir Alan Grieves <span style="color:#8a6a2b;">Partner</span></div></div></div>
+            <div style="background:#fff;border:1px solid #e3e2dc;border-radius:10px;padding:20px;"><div style="font:600 10px 'IBM Plex Mono',monospace;color:#8b938c;letter-spacing:.1em;margin-bottom:14px;">ATTENDEES</div><div style="display:flex;flex-direction:column;gap:10px;font-size:15px;"><div style="display:flex;justify-content:space-between;gap:10px;">{{ detailCustomerName }} <span style="color:#8b938c;">Customer</span></div><div style="display:flex;justify-content:space-between;gap:10px;">{{ meName }} <span style="color:#8b938c;">Assistant Private Banker</span></div><div style="display:flex;justify-content:space-between;gap:10px;">James Whitlock <span style="color:#8b938c;">Analyst</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Sir Alan Grieves <span style="color:#8a6a2b;">Partner</span></div></div></div>
             <sc-if value="{{ detailConfirmed }}" hint-placeholder-val="{{ true }}"><div style="background:#fff;border:1px solid #e3e2dc;border-radius:10px;padding:20px;"><div style="font:600 10px 'IBM Plex Mono',monospace;color:#8b938c;letter-spacing:.1em;margin-bottom:14px;">LOGISTICS — AUTO-ARRANGED</div><div style="display:flex;flex-direction:column;gap:10px;font-size:15px;"><div style="display:flex;justify-content:space-between;gap:10px;">Room reserved <span style="color:#1f6b45;">✓ Done</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Cleaning &amp; reset <span style="color:#8a6a2b;">{{ detailTurnaround }}</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Catering <span style="color:#1f6b45;">{{ detailCatering }}</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Reception <span style="color:#1f6b45;">✓ Notified</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Housekeeping <span style="color:#1f6b45;">✓ Notified</span></div></div></div></sc-if>
             <sc-if value="{{ detailAwaiting }}" hint-placeholder-val="{{ false }}"><div style="background:#fff;border:1px solid #e3e2dc;border-radius:10px;padding:20px;"><div style="font:600 10px 'IBM Plex Mono',monospace;color:#8b938c;letter-spacing:.1em;margin-bottom:14px;">LOGISTICS — PENDING SELECTION</div><div style="display:flex;flex-direction:column;gap:10px;font-size:15px;"><div style="display:flex;justify-content:space-between;gap:10px;">Room reserved <span style="color:#9a6f2e;">◷ On hold</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Catering <span style="color:#8b938c;">— Queued</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Reception <span style="color:#8b938c;">— Queued</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Housekeeping <span style="color:#8b938c;">— Queued</span></div></div></div></sc-if>
             <sc-if value="{{ detailDeclined }}" hint-placeholder-val="{{ false }}"><div style="background:#fff;border:1px solid #e3e2dc;border-radius:10px;padding:20px;"><div style="font:600 10px 'IBM Plex Mono',monospace;color:#8b938c;letter-spacing:.1em;margin-bottom:14px;">LOGISTICS — PAUSED</div><div style="display:flex;flex-direction:column;gap:10px;font-size:15px;"><div style="display:flex;justify-content:space-between;gap:10px;">Room hold <span style="color:#9a6f2e;">◷ Released</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Catering <span style="color:#8b938c;">— Paused</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Reception <span style="color:#8b938c;">— Paused</span></div><div style="display:flex;justify-content:space-between;gap:10px;">Housekeeping <span style="color:#8b938c;">— Paused</span></div></div></div></sc-if>
@@ -2681,73 +2698,71 @@ class Component extends DCLogic {
     super(p);
     this.AI_MIN_MS = 800;
     this.TURNAROUND = 20;
-    this.ME = 'Rachel Adeyemi';
+    this.USERS = [
+      { id:'lj', name:'Leon Jurkovic', first:'Leon', ini:'LJ', role:'Assistant Private Banker' },
+      { id:'lr', name:'Lucy Robertson', first:'Lucy', ini:'LR', role:'Assistant Private Banker' },
+    ];
     this.TYPES = ['Portfolio review','Onboarding','Estate planning','Prospect intro','Annual review','Trust review','Lending & mortgage review','Investment proposal','KYC refresh','Philanthropy planning','Succession planning','FX & treasury review','Account opening','Complaint resolution','Family governance','Credit committee follow-up'];
     this.DURATIONS = ['30 minutes','45 minutes','60 minutes','90 minutes','120 minutes'];
     this.DUR_MIN = [30,45,60,90,120];
     this.DEFAULT_DUR = { 0:2, 1:3, 2:2, 3:1, 4:2, 5:2, 6:2, 7:2, 8:1, 9:2, 10:3, 11:1, 12:1, 13:2, 14:3, 15:1 };
-    this.LOCATIONS = ['London — Mayfair','London — City','Geneva','Zurich'];
+    this.LOCATIONS = ['London'];
     this.WHEN = ['This week','Next two weeks','Next month'];
     // Building → room list, as Outlook exposes them.
     this.BUILDINGS = {
-      0:[ { name:'Mayfair — Client Floor 3', rooms:['Boardroom 12A','Boardroom 9B','Salon 3.2'] },
-          { name:'Mayfair — Executive Suites', rooms:['Grosvenor Suite','Berkeley Suite'] } ],
-      1:[ { name:'Fleet St — Customer Rooms', rooms:['Customer Room 1','Customer Room 4','Customer Room 7'] },
-          { name:'Fleet St — Executive Suites', rooms:['Temple Suite','Whitefriars Suite'] },
-          { name:'Bishopsgate — Meeting Centre', rooms:['MC 2.01','MC 2.04','MC 3.11'] } ],
-      2:[ { name:'Rue du Rhône — Client Rooms', rooms:['Salon Léman','Salon Jura'] },
-          { name:'Quai Wilson — Executive Floor', rooms:['Wilson 1','Wilson 2'] } ],
-      3:[ { name:'Bahnhofstrasse — Client Rooms', rooms:['Zunfthaus','Limmat Room'] } ],
+      0:[ { name:'Fleet St — Customer rooms', rooms:['Customer Room 1','Customer Room 4','Customer Room 7'] },
+          { name:'Fleet St — Non-customer rooms', rooms:['Meeting Room 2.01','Meeting Room 2.04','Meeting Room 3.11'] },
+          { name:'Lowndes St — Customer rooms', rooms:['Lowndes Room 1','Lowndes Room 2','Lowndes Boardroom'] } ],
     };
     this.ROOMS = ['Private boardroom','Meeting room','Video suite'];
     this.CATERING = ['None','Tea & coffee','Working lunch','Breakfast'];
     this.CATERING_MIN = [0,30,120,45];
     this.CATERING_STEPS = { 1:[15,30,45,60], 2:[60,90,120,150], 3:[30,45,60,90] };
     this.SLOTS = [
-      { rank:1, date:'Tue 29 Jul', long:'Tuesday 29 July', startH:10, roomBase:'Boardroom 12A' },
-      { rank:2, date:'Wed 30 Jul', long:'Wednesday 30 July', startH:14.5, roomBase:'Boardroom 9B' },
-      { rank:3, date:'Thu 31 Jul', long:'Thursday 31 July', startH:9, roomBase:'Boardroom 12A' },
+      { rank:1, date:'Tue 29 Jul', long:'Tuesday 29 July', startH:10, roomBase:'Customer Room 1' },
+      { rank:2, date:'Wed 30 Jul', long:'Wednesday 30 July', startH:14.5, roomBase:'Customer Room 4' },
+      { rank:3, date:'Thu 31 Jul', long:'Thursday 31 July', startH:9, roomBase:'Customer Room 1' },
     ];
     this.BUSY = {
       0:{ ra:[[8.5,9,'Morning call']], jw:[[8,9,'Desk huddle']], ag:[[12,13,'Client lunch']], pn:[[15,16,'Review']], mf:[[10,10.5,'Client call']], sd:[] },
-      1:{ ra:[], jw:[[9,10,'Portfolio committee']], ag:[[16,17,'Board meeting']], pn:[[14.5,15.5,'Internal review']], mf:[[11,12,'Pipeline']], sd:[[8,18,'In Zurich']] },
+      1:{ ra:[], jw:[[9,10,'Portfolio committee']], ag:[[16,17,'Board meeting']], pn:[[14.5,15.5,'Internal review']], mf:[[11,12,'Pipeline']], sd:[[8,18,'Out of office']] },
       2:{ ra:[[11,12,'Standing 1:1']], jw:[[9,10.5,'Portfolio committee']], ag:[[13,14,'Investment forum']], pn:[], mf:[], sd:[] },
     };
     this.TENTATIVE = { 1:['pn'] };
     this.TRAVEL = { 1:['sd'] };
     this.STATE_META = { free:['Free','#1f6b45'], tentative:['Tentative','#9a6f2e'], busy:['Busy','#96301f'], travelling:['Travelling','#8b938c'] };
     this.DIR = [
-      { id:'ra', name:'Rachel Adeyemi', role:'Private Banker (you)', dept:'Private Banking', office:'Mayfair', ini:'RA', color:'#1b4d3a' },
-      { id:'jw', name:'James Whitlock', role:'Analyst', dept:'Private Banking', office:'Mayfair', ini:'JW', color:'#2f6b5c' },
-      { id:'ag', name:'Sir Alan Grieves', role:'Partner', dept:'Partnership', office:'Mayfair', ini:'AG', color:'#8a6a2b' },
-      { id:'pn', name:'Priya Nair', role:'Trust specialist', dept:'Trust & Estates', office:'Mayfair', ini:'PN', color:'#4a6b3a' },
-      { id:'mf', name:'Marcus Feld', role:'Investment specialist', dept:'Investments', office:'City', ini:'MF', color:'#3a423c' },
-      { id:'sd', name:'Sofia Duarte', role:'Partner', dept:'Partnership', office:'Geneva', ini:'SD', color:'#8a6a2b' },
-      { id:'ew', name:'Eleanor Whitmore', role:'Lead Private Banker', dept:'Private Banking', office:'Mayfair', ini:'EW', color:'#8a6a2b' },
-      { id:'kb', name:'Kwame Boateng', role:'Private Banker', dept:'Private Banking', office:'City', ini:'KB', color:'#1b4d3a' },
-      { id:'ln', name:'Lucia Neri', role:'Private Banker', dept:'Private Banking', office:'Geneva', ini:'LN', color:'#1b4d3a' },
-      { id:'ow', name:'Oliver Wren', role:'Associate Banker', dept:'Private Banking', office:'Mayfair', ini:'OW', color:'#2f6b5c' },
-      { id:'th', name:'Tessa Hale', role:'Client executive', dept:'Client Service', office:'City', ini:'TH', color:'#2f6b5c' },
-      { id:'gm', name:'Gita Menon', role:'Trust manager', dept:'Trust & Estates', office:'Mayfair', ini:'GM', color:'#4a6b3a' },
-      { id:'rc', name:'Rory Chen', role:'Estates lawyer', dept:'Trust & Estates', office:'City', ini:'RC', color:'#4a6b3a' },
-      { id:'as', name:'Anya Sokolova', role:'Portfolio manager', dept:'Investments', office:'City', ini:'AS', color:'#3a423c' },
-      { id:'db', name:'Dev Bhatt', role:'Research analyst', dept:'Investments', office:'City', ini:'DB', color:'#3a423c' },
-      { id:'hm', name:'Hugo Moreau', role:'Discretionary manager', dept:'Investments', office:'Geneva', ini:'HM', color:'#3a423c' },
-      { id:'fk', name:'Femi Kalu', role:'Lending director', dept:'Lending', office:'City', ini:'FK', color:'#5a3a6b' },
-      { id:'sm', name:'Sara Moss', role:'Mortgage adviser', dept:'Lending', office:'City', ini:'SM', color:'#5a3a6b' },
-      { id:'yt', name:'Yuki Tanaka', role:'FX dealer', dept:'FX & Treasury', office:'City', ini:'YT', color:'#2f5b6b' },
-      { id:'pb', name:'Paulo Braga', role:'Treasury manager', dept:'FX & Treasury', office:'City', ini:'PB', color:'#2f5b6b' },
-      { id:'em', name:'Elena Marsh', role:'Philanthropy adviser', dept:'Philanthropy', office:'Mayfair', ini:'EM', color:'#7a5a2b' },
-      { id:'sb', name:'Simon Blake', role:'Tax adviser', dept:'Tax', office:'Mayfair', ini:'SB', color:'#6b5a2b' },
-      { id:'ai', name:'Aisha Iqbal', role:'Legal counsel', dept:'Legal', office:'City', ini:'AI', color:'#6b5a2b' },
-      { id:'nj', name:'Nadia Jalal', role:'Compliance officer', dept:'Compliance', office:'City', ini:'NJ', color:'#96301f' },
-      { id:'ck', name:'Callum Reid', role:'KYC analyst', dept:'Compliance', office:'City', ini:'CR', color:'#96301f' },
-      { id:'jd', name:'Jonas Dahl', role:'Client service manager', dept:'Client Service', office:'Zurich', ini:'JD', color:'#2f6b5c' },
-      { id:'rb', name:'Rina Bose', role:'Client service adviser', dept:'Client Service', office:'Mayfair', ini:'RB', color:'#2f6b5c' },
-      { id:'ep', name:'Eve Pardo', role:'Digital adviser', dept:'Digital', office:'City', ini:'EP', color:'#3a5c6b' },
-      { id:'bh', name:'Bea Hart', role:'Front of house', dept:'Facilities', office:'Mayfair', ini:'BH', color:'#5d6560' },
-      { id:'tv', name:'Tomas Vlk', role:'Facilities manager', dept:'Facilities', office:'City', ini:'TV', color:'#5d6560' },
-      { id:'mp', name:'Marta Pires', role:'Catering manager', dept:'Facilities', office:'City', ini:'MP', color:'#5d6560' },
+      { id:'ra', name:'Leon Jurkovic', role:'Assistant Private Banker (you)', dept:'Private Banking', office:'Lowndes St', ini:'LJ', color:'#1b4d3a' },
+      { id:'jw', name:'James Whitlock', role:'Analyst', dept:'Private Banking', office:'Lowndes St', ini:'JW', color:'#2f6b5c' },
+      { id:'ag', name:'Sir Alan Grieves', role:'Partner', dept:'Partnership', office:'Lowndes St', ini:'AG', color:'#8a6a2b' },
+      { id:'pn', name:'Priya Nair', role:'Trust specialist', dept:'Trust & Estates', office:'Lowndes St', ini:'PN', color:'#4a6b3a' },
+      { id:'mf', name:'Marcus Feld', role:'Investment specialist', dept:'Investments', office:'Fleet St', ini:'MF', color:'#3a423c' },
+      { id:'sd', name:'Sofia Duarte', role:'Partner', dept:'Partnership', office:'Fleet St', ini:'SD', color:'#8a6a2b' },
+      { id:'ew', name:'Billy Moore', role:'Lead Private Banker', dept:'Private Banking', office:'Lowndes St', ini:'BM', color:'#8a6a2b' },
+      { id:'kb', name:'Kwame Boateng', role:'Private Banker', dept:'Private Banking', office:'Fleet St', ini:'KB', color:'#1b4d3a' },
+      { id:'ln', name:'Lucia Neri', role:'Private Banker', dept:'Private Banking', office:'Fleet St', ini:'LN', color:'#1b4d3a' },
+      { id:'ow', name:'Oliver Wren', role:'Associate Banker', dept:'Private Banking', office:'Lowndes St', ini:'OW', color:'#2f6b5c' },
+      { id:'th', name:'Tessa Hale', role:'Client executive', dept:'Client Service', office:'Fleet St', ini:'TH', color:'#2f6b5c' },
+      { id:'gm', name:'Gita Menon', role:'Trust manager', dept:'Trust & Estates', office:'Lowndes St', ini:'GM', color:'#4a6b3a' },
+      { id:'rc', name:'Rory Chen', role:'Estates lawyer', dept:'Trust & Estates', office:'Fleet St', ini:'RC', color:'#4a6b3a' },
+      { id:'as', name:'Anya Sokolova', role:'Portfolio manager', dept:'Investments', office:'Fleet St', ini:'AS', color:'#3a423c' },
+      { id:'db', name:'Dev Bhatt', role:'Research analyst', dept:'Investments', office:'Fleet St', ini:'DB', color:'#3a423c' },
+      { id:'hm', name:'Hugo Moreau', role:'Discretionary manager', dept:'Investments', office:'Fleet St', ini:'HM', color:'#3a423c' },
+      { id:'fk', name:'Femi Kalu', role:'Lending director', dept:'Lending', office:'Fleet St', ini:'FK', color:'#5a3a6b' },
+      { id:'sm', name:'Sara Moss', role:'Mortgage adviser', dept:'Lending', office:'Fleet St', ini:'SM', color:'#5a3a6b' },
+      { id:'yt', name:'Yuki Tanaka', role:'FX dealer', dept:'FX & Treasury', office:'Fleet St', ini:'YT', color:'#2f5b6b' },
+      { id:'pb', name:'Paulo Braga', role:'Treasury manager', dept:'FX & Treasury', office:'Fleet St', ini:'PB', color:'#2f5b6b' },
+      { id:'em', name:'Elena Marsh', role:'Philanthropy adviser', dept:'Philanthropy', office:'Lowndes St', ini:'EM', color:'#7a5a2b' },
+      { id:'sb', name:'Simon Blake', role:'Tax adviser', dept:'Tax', office:'Lowndes St', ini:'SB', color:'#6b5a2b' },
+      { id:'ai', name:'Aisha Iqbal', role:'Legal counsel', dept:'Legal', office:'Fleet St', ini:'AI', color:'#6b5a2b' },
+      { id:'nj', name:'Nadia Jalal', role:'Compliance officer', dept:'Compliance', office:'Fleet St', ini:'NJ', color:'#96301f' },
+      { id:'ck', name:'Callum Reid', role:'KYC analyst', dept:'Compliance', office:'Fleet St', ini:'CR', color:'#96301f' },
+      { id:'jd', name:'Jonas Dahl', role:'Client service manager', dept:'Client Service', office:'Fleet St', ini:'JD', color:'#2f6b5c' },
+      { id:'rb', name:'Rina Bose', role:'Client service adviser', dept:'Client Service', office:'Lowndes St', ini:'RB', color:'#2f6b5c' },
+      { id:'ep', name:'Eve Pardo', role:'Digital adviser', dept:'Digital', office:'Fleet St', ini:'EP', color:'#3a5c6b' },
+      { id:'bh', name:'Bea Hart', role:'Front of house', dept:'Facilities', office:'Lowndes St', ini:'BH', color:'#5d6560' },
+      { id:'tv', name:'Tomas Vlk', role:'Facilities manager', dept:'Facilities', office:'Fleet St', ini:'TV', color:'#5d6560' },
+      { id:'mp', name:'Marta Pires', role:'Catering manager', dept:'Facilities', office:'Fleet St', ini:'MP', color:'#5d6560' },
     ];
     this.SUGGEST = {
       0:['mf','Standard for portfolio reviews'],
@@ -2788,13 +2803,23 @@ class Component extends DCLogic {
     };
     this.TONES = ['warm','concise','formal'];
     this.CRM = [
-      { id:'hana', name:'Hana Okonkwo', first:'Hana', salut:'Ms Okonkwo', ini:'HO', ref:'88-4412', segment:'Private Client', owner:'Rachel Adeyemi', partnerOf:'Sir Alan Grieves', shared:3, email:'Hana Okonkwo <h.okonkwo@example.com>' },
-      { id:'bianchi', name:'Daniela Bianchi', first:'Daniela', salut:'Ms Bianchi', ini:'DB', ref:'91-2207', segment:'Private Client', owner:'Rachel Adeyemi', partnerOf:null, shared:0, email:'Daniela Bianchi <d.bianchi@example.com>' },
-      { id:'fontaine', name:'Lucien Fontaine', first:'Lucien', salut:'Mr Fontaine', ini:'LF', ref:'77-9013', segment:'Key Client', owner:'Priya Nair', partnerOf:'Sofia Duarte', shared:6, email:'Lucien Fontaine <l.fontaine@example.com>' },
-      { id:'osei', name:'Kofi Osei', first:'Kofi', salut:'Mr Osei', ini:'KO', ref:'82-5510', segment:'Private Client', owner:'Priya Nair', partnerOf:null, shared:0, email:'Kofi Osei <k.osei@example.com>' },
-      { id:'alrashid', name:'Mariam Al-Rashid', first:'Mariam', salut:'Ms Al-Rashid', ini:'MA', ref:'95-1188', segment:'Prospect (converted)', owner:'James Whitlock', partnerOf:null, shared:0, email:'Mariam Al-Rashid <m.alrashid@example.com>' },
+      { id:'hana', name:'Hana Okonkwo', first:'Hana', salut:'Ms Okonkwo', ini:'HO', ref:'88-4412', segment:'Private Client', owner:'@me', partnerOf:'Sir Alan Grieves', shared:3, emails:[
+        { label:'Primary email', addr:'Hana Okonkwo <h.okonkwo@example.com>' },
+        { label:'Family office', addr:'Okonkwo Family Office <office@okonkwo-fo.example>' },
+        { label:'Personal', addr:'Hana Okonkwo <hana.okonkwo@post.example>' } ] },
+      { id:'bianchi', name:'Daniela Bianchi', first:'Daniela', salut:'Ms Bianchi', ini:'DB', ref:'91-2207', segment:'Private Client', owner:'@me', partnerOf:null, shared:0, emails:[
+        { label:'Primary email', addr:'Daniela Bianchi <d.bianchi@example.com>' },
+        { label:'Business', addr:'Daniela Bianchi <db@bianchi-group.example>' } ] },
+      { id:'fontaine', name:'Lucien Fontaine', first:'Lucien', salut:'Mr Fontaine', ini:'LF', ref:'77-9013', segment:'Key Client', owner:'Priya Nair', partnerOf:'Sofia Duarte', shared:6, emails:[
+        { label:'Primary email', addr:'Lucien Fontaine <l.fontaine@example.com>' },
+        { label:'Assistant (Camille Roux)', addr:'Camille Roux <c.roux@fontaine-holdings.example>' } ] },
+      { id:'osei', name:'Kofi Osei', first:'Kofi', salut:'Mr Osei', ini:'KO', ref:'82-5510', segment:'Private Client', owner:'Priya Nair', partnerOf:null, shared:0, emails:[
+        { label:'Primary email', addr:'Kofi Osei <k.osei@example.com>' },
+        { label:'Business', addr:'Kofi Osei <k.osei@oseiventures.example>' } ] },
+      { id:'alrashid', name:'Mariam Al-Rashid', first:'Mariam', salut:'Ms Al-Rashid', ini:'MA', ref:'95-1188', segment:'Prospect (converted)', owner:'James Whitlock', partnerOf:null, shared:0, emails:[
+        { label:'Primary email', addr:'Mariam Al-Rashid <m.alrashid@example.com>' } ] },
     ];
-    this.BANKERS = ['Rachel Adeyemi','James Whitlock','Priya Nair','Marcus Feld'];
+    this.BANKERS = ['Leon Jurkovic','Lucy Robertson','James Whitlock','Priya Nair','Marcus Feld'];
     this.STATUS = { action:['Needs action','#96301f','#f8ebe7'], awaiting:['Awaiting','#9a6f2e','#f7f0e2'], draft:['Draft','#5d6560','#eeedea'], confirmed:['Confirmed','#1f6b45','#e9f2ec'], cancelled:['Cancelled','#8b938c','#eeedea'] };
     this.WAIVE_REASONS = ['Client requested','Partner unavailable','Not required for this type'];
     this.BOOK = [
@@ -2806,7 +2831,7 @@ class Component extends DCLogic {
       { title:'Onboarding — S. Beaumont', rm:'Marcus Feld', status:'action', updated:'4h ago' },
     ];
     this.state = {
-      screen:'home', surface:'rm',
+      screen:'home', surface:'rm', user:'lj',
       openMenu:null, dialog:null, step:'details',
       typeI:null, durI:null, locI:0, buildingI:0, roomI:0, autoDur:false, advanced:false, whenI:1,
       typeQuery:'', peopleQuery:'', partyPick:[], searchAll:false, coHost:false,
@@ -2833,6 +2858,18 @@ class Component extends DCLogic {
     };
   }
   set(p){ this.setState(p); }
+  meUser(){ const id = this.state ? this.state.user : 'lj'; return this.USERS.find(u => u.id === id) || this.USERS[0]; }
+  me(){ return this.meUser().name; }
+  meFirst(){ return this.meUser().first; }
+  switchUser(id){
+    const u = this.USERS.find(x => x.id === id) || this.USERS[0];
+    this.DIR[0].name = u.name; this.DIR[0].ini = u.ini;
+    this.clearTimers();
+    this.set({ user:u.id, role:'rm', screen:'home', openMenu:null, bookRm:'all', bookStatus:'all', bookQuery:'' });
+  }
+  // CRM rows with '@me' ownership resolved to the signed-in banker and the
+  // first D365 address promoted to the default `email`.
+  crmAll(){ const meName = this.me(); return this.CRM.map(c => ({ ...c, owner: c.owner === '@me' ? meName : c.owner, email: c.emails ? c.emails[0].addr : c.email })); }
   without(map, key){ const o = { ...map }; delete o[key]; return o; }
   // Clears a field's AI markers and, on the first edit of an AI-filled
   // extraction, records the review (reusing the confirm/audit state) so the
@@ -2864,7 +2901,7 @@ class Component extends DCLogic {
     const s = this.state;
     if(s.prospect) return { ...s.prospect, ini: s.prospect.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(), first: s.prospect.name.split(' ')[0], salut: s.prospect.name, segment:'Prospect', owner:this.ME, partnerOf:null, shared:0, prospect:true };
     if(!s.customer) return null;
-    return this.CRM.find(c => c.id === s.customer) || null;
+    return this.crmAll().find(c => c.id === s.customer) || null;
   }
   meetingIds(){
     const s = this.state;
@@ -2927,7 +2964,7 @@ class Component extends DCLogic {
     });
   }
   selectCustomer(id){
-    const rec = this.CRM.find(c => c.id === id);
+    const rec = this.crmAll().find(c => c.id === id);
     this.clearTimers();
     this.setState({ customer:id, prospect:null, custQuery:'', openMenu:null, crm:'checking', custEmail: rec ? rec.email : '', guests:[], showParties:false });
     this._t4 = setTimeout(() => this.setState({ crm:'done', partner: !!(rec && rec.partnerOf) }), Math.max(this.AI_MIN_MS - 100, 700));
@@ -2938,43 +2975,45 @@ class Component extends DCLogic {
     const t=(s.typeI==null?'meeting':this.TYPES[s.typeI].toLowerCase());
     const loc=this.LOCATIONS[s.locI==null?0:s.locI], dur=this.DURATIONS[s.durI==null?2:s.durI];
     const who=rec?rec.salut:'Sir or Madam', r=s.resched;
+    const meName=this.me(), meRole=this.meUser().role;
     const picked=this.chosenSlots();
     const times=picked.map(sl=>'   \u2022  '+sl.long+', '+this.fmt(sl.startH)).join('\n');
     const n = picked.length === 1 ? 'a time' : (picked.length === 2 ? 'two times' : 'three times');
     if(tone==='concise'){
       const open = r ? "The earlier times didn't work \u2014 here are "+n+" for your "+t+':' : [n.charAt(0).toUpperCase()+n.slice(1)+' are available for your '+t+':','Here are '+n+' for your '+t+':'][v%2];
-      return 'Dear '+who+',\n\n'+open+'\n\n'+times+'\n\n'+dur+' at our '+loc+' office. Pick whichever suits you \u2014 everything else is arranged automatically.\n\nKind regards,\nRachel Adeyemi';
+      return 'Dear '+who+',\n\n'+open+'\n\n'+times+'\n\n'+dur+' at our '+loc+' office. Pick whichever suits you \u2014 everything else is arranged automatically.\n\nKind regards,\n'+meName;
     }
     if(tone==='formal'){
       const open = r ? 'I regret that the previously proposed times were unsuitable. Please find revised times for your '+t+' below:' : ['Further to our recent correspondence, I write to propose the following for your '+t+':','I am writing to arrange your forthcoming '+t+'. The following are held for your consideration:'][v%2];
-      return 'Dear '+who+',\n\n'+open+'\n\n'+times+'\n\nThe meeting is scheduled for '+dur+' at our '+loc+' office. Upon your selection, all arrangements will be confirmed on your behalf.\n\nYours sincerely,\nRachel Adeyemi\nPrivate Banker';
+      return 'Dear '+who+',\n\n'+open+'\n\n'+times+'\n\nThe meeting is scheduled for '+dur+' at our '+loc+' office. Upon your selection, all arrangements will be confirmed on your behalf.\n\nYours sincerely,\n'+meName+'\n'+meRole;
     }
     const open = r ? "Thank you for letting me know the earlier times didn't suit \u2014 my apologies. I have found "+n+" for your "+t+'.' : ['I hope you are well. I would be glad to meet with you for your '+t+'.','It would be a pleasure to see you again for your '+t+'.'][v%2];
-    return 'Dear '+who+',\n\n'+open+' Please let me know which of the following is most convenient:\n\n'+times+'\n\nThe meeting will be held at our '+loc+' office and will last '+dur+'. Simply choose whichever time suits you best and everything else will be arranged on your behalf.\n\nWith kind regards,\nRachel Adeyemi\nPrivate Banker';
+    return 'Dear '+who+',\n\n'+open+' Please let me know which of the following is most convenient:\n\n'+times+'\n\nThe meeting will be held at our '+loc+' office and will last '+dur+'. Simply choose whichever time suits you best and everything else will be arranged on your behalf.\n\nWith kind regards,\n'+meName+'\n'+meRole;
   }
   cancelFor(){
     const s=this.state;
     const rec=this.custRecord();
     const who=rec?rec.salut:'Sir or Madam';
+    const meName=this.me(), meRole=this.meUser().role;
     const t=(s.typeI==null?'meeting':this.TYPES[s.typeI].toLowerCase());
     const c=s.confirmedSlot!=null?this.SLOTS[s.confirmedSlot]:null;
     const what=c ? 'our '+t+' on '+c.long+' at '+this.fmt(c.startH) : 'your upcoming '+t;
-    return 'Dear '+who+',\n\nI am sorry to let you know that '+what+' has had to be cancelled. Please accept my apologies for any inconvenience this may cause.\n\nI will be in touch very shortly with new dates. If there is anything you need in the meantime, please do contact me directly.\n\nWith kind regards,\nRachel Adeyemi\nPrivate Banker';
+    return 'Dear '+who+',\n\nI am sorry to let you know that '+what+' has had to be cancelled. Please accept my apologies for any inconvenience this may cause.\n\nI will be in touch very shortly with new dates. If there is anything you need in the meantime, please do contact me directly.\n\nWith kind regards,\n'+meName+'\n'+meRole;
   }
   extractFrom(text){
     const lc = text.toLowerCase();
     const patch = {}; const found = []; const ai = {}; const low = {};
-    const cust = this.CRM.find(c => c.name.toLowerCase().split(' ').some(w => w.length > 2 && lc.includes(w)) || lc.includes(c.first.toLowerCase()));
+    const cust = this.crmAll().find(c => c.name.toLowerCase().split(' ').some(w => w.length > 2 && lc.includes(w)) || lc.includes(c.first.toLowerCase()));
     if(cust){ patch.customer = cust.id; patch.prospect = null; patch.crm = 'done'; patch.custEmail = cust.email; patch.partner = !!cust.partnerOf; found.push(cust.name); }
     for(const [k,i] of [['estate',2],['onboard',1],['portfolio',0],['prospect',3],['annual',4]]){ if(lc.includes(k)){ patch.typeI=i; ai.typeI=1; found.push(this.TYPES[i]); break; } }
     const dm = lc.match(/\b(30|45|60|90)\b/);
     let durI = dm ? ['30','45','60','90'].indexOf(dm[1]) : (/(an hour|one hour|1 hour)/.test(lc) ? 2 : (/half an hour/.test(lc) ? 0 : -1));
     if(durI >= 0){ patch.durI=durI; patch.autoDur=false; ai.durI=1; if(!dm) low.durI=1; found.push(this.DURATIONS[durI]); }
     else if(patch.typeI != null){ patch.durI = this.DEFAULT_DUR[patch.typeI]; patch.autoDur = true; }
-    for(const [k,i] of [['geneva',2],['zurich',3],['city',1],['mayfair',0]]){ if(lc.includes(k)){ patch.locI=i; ai.locI=1; found.push(this.LOCATIONS[i]); const b = (this.BUILDINGS[i]||[])[0]; if(b){ patch.buildingI = 0; ai.buildingI = 1; low.buildingI = 1; found.push(b.name); } break; } }
+    for(const [k,i] of [['lowndes',2],['fleet',0]]){ if(lc.includes(k)){ patch.locI=0; const b = this.BUILDINGS[0][i]; patch.buildingI = i; ai.buildingI = 1; found.push(b.name); break; } }
     if(/video|remote|virtual|teams call/.test(lc)){ patch.roomI=2; ai.roomI=1; found.push('Video suite'); }
     else if(patch.typeI != null){ patch.roomI = 0; ai.roomI = 1; low.roomI = 1; }
-    const adds = this.DIR.filter(p => p.name.toLowerCase().split(' ').some(w => w.length > 2 && w !== 'rachel' && lc.includes(w)) && !this.state.attendees.includes(p.id) && p.id !== 'ra').map(p => p.id);
+    const adds = this.DIR.filter(p => p.name.toLowerCase().split(' ').some(w => w.length > 2 && w !== this.meFirst().toLowerCase() && lc.includes(w)) && !this.state.attendees.includes(p.id) && p.id !== 'ra').map(p => p.id);
     if(adds.length){ patch.attendees = [...this.state.attendees, ...adds]; ai.attendees=1; low.attendees=1; found.push(adds.map(id => this.DIR.find(p => p.id === id).name).join(', ') + ' added'); }
     if(/partner/.test(lc) || adds.some(id => this.DIR.find(p => p.id === id).role === 'Partner')){ patch.partner = true; found.push('Partner attending'); }
     if(/working lunch|over lunch|lunch/.test(lc)){ patch.cateringI = 2; ai.cateringI = 1; found.push('Working lunch'); }
@@ -3041,7 +3080,7 @@ class Component extends DCLogic {
     const draftDone = s.draft==='done';
     const draftBusy = s.draft==='thinking' || s.draft==='reveal';
     const bia = s.detailCase==='bianchi';
-    const biaRec = this.CRM.find(c => c.id==='bianchi');
+    const biaRec = this.crmAll().find(c => c.id==='bianchi');
     const dcust = bia ? biaRec : (rec || biaRec);
     const aiKeys = Object.keys(s.aiFields);
     const needsConfirm = s.intake==='done' && aiKeys.length > 0 && !s.detailsConfirmed;
@@ -3058,10 +3097,11 @@ class Component extends DCLogic {
 
     // ---- customer search ----
     const q = s.custQuery.trim().toLowerCase();
-    const scoped = s.searchAll ? this.CRM : this.CRM.filter(c => c.owner === this.ME);
+    const all = this.crmAll();
+    const scoped = s.searchAll ? all : all.filter(c => c.owner === this.me());
     const results = scoped.filter(c => !q || c.name.toLowerCase().includes(q) || c.ref.includes(q)).slice(0, 4);
     const custPicked = !!rec;
-    const custRestricted = !!(rec && !rec.prospect && rec.owner !== this.ME);
+    const custRestricted = !!(rec && !rec.prospect && rec.owner !== this.me());
 
     // ---- diary panel ----
     const dSlot = s.diaryOpen;
@@ -3074,10 +3114,11 @@ class Component extends DCLogic {
     const goDetailFn = () => this.set({ screen:'detail', openMenu:null, sentToast:false, detailCase:'hana' });
     const goDetailBianchiFn = () => this.set({ screen:'detail', openMenu:null, sentToast:false, detailCase:'bianchi' });
     const resumeDraftFn = () => { this.clearTimers(); this.set({ screen:'create', step:'details', ...s.savedDraft, openMenu:null, intake:'idle', intakeText:'', intakeSummary:'', aiFields:{}, lowConf:{}, detailsConfirmed:false, draft:'idle', chosen:[0,1], prospect:null, crm:'done', custEmail:this.CRM[0].email, resched:false, hasSent:false, sentToast:false, confirmedSlot:null, cancelled:false, emailEdited:false, subjectEdited:false, widened:false, relaxed:false, waived:null, waiveOpen:false }); };
-    const rachelRows = [{ title:'Estate planning — D. Bianchi', sub:'Daniela Bianchi', rm:'Rachel Adeyemi', status:'action', updated:'2h ago', open:goDetailBianchiFn }];
-    if(s.hasSent) rachelRows.push({ title:typeName+' — '+(rec?rec.name:''), sub:(rec?rec.name:''), rm:'Rachel Adeyemi', status: s.cancelled ? 'cancelled' : (conf ? 'confirmed' : 'awaiting'), updated:'just now', open:goDetailFn });
-    rachelRows.push({ title:'Onboarding — The Vasquez Trust', sub:'The Vasquez Trust', rm:'Rachel Adeyemi', status:'awaiting', updated:'yesterday', open:goDetailFn });
-    if(s.savedDraft) rachelRows.push({ title:this.TYPES[s.savedDraft.typeI]+' — Hana Okonkwo', sub:'Saved draft — nothing sent', rm:'Rachel Adeyemi', status:'draft', updated:'1h ago', open:resumeDraftFn });
+    const meName = this.me();
+    const rachelRows = [{ title:'Estate planning — D. Bianchi', sub:'Daniela Bianchi', rm:meName, status:'action', updated:'2h ago', open:goDetailBianchiFn }];
+    if(s.hasSent) rachelRows.push({ title:typeName+' — '+(rec?rec.name:''), sub:(rec?rec.name:''), rm:meName, status: s.cancelled ? 'cancelled' : (conf ? 'confirmed' : 'awaiting'), updated:'just now', open:goDetailFn });
+    rachelRows.push({ title:'Onboarding — The Vasquez Trust', sub:'The Vasquez Trust', rm:meName, status:'awaiting', updated:'yesterday', open:goDetailFn });
+    if(s.savedDraft) rachelRows.push({ title:this.TYPES[s.savedDraft.typeI]+' — Hana Okonkwo', sub:'Saved draft — nothing sent', rm:meName, status:'draft', updated:'1h ago', open:resumeDraftFn });
     const deco = (m) => { const st = this.STATUS[m.status]; return { ...m, label:st[0], fg:st[1], bg:st[2] }; };
     const fullBook = [...rachelRows, ...this.BOOK];
     const bq = s.bookQuery.trim().toLowerCase();
@@ -3184,7 +3225,7 @@ class Component extends DCLogic {
     return {
       showRm: s.surface==='rm', showCustomer: s.surface==='customer',
       custName: rec ? rec.name : '', custFirst: rec ? rec.first : 'the customer', custIni: rec ? rec.ini : '',
-      custMeta: rec ? (rec.prospect ? (rec.verified ? 'CRM ' + rec.ref + ' · new client record' : 'No CRM record yet') : ('CRM ' + rec.ref + ' · ' + (rec.owner === this.ME ? 'your client' : rec.owner))) : '',
+      custMeta: rec ? (rec.prospect ? (rec.verified ? 'CRM ' + rec.ref + ' · new client record' : 'No CRM record yet') : ('CRM ' + rec.ref + ' · ' + (rec.owner === this.me() ? 'your client' : rec.owner))) : '',
       custPicked, custNone: !custPicked,
       custQuery: s.custQuery,
       onCustQuery: (e) => this.set({ custQuery: e.target.value, openMenu:'cust' }),
@@ -3192,7 +3233,7 @@ class Component extends DCLogic {
       custMenu: s.openMenu==='cust',
       custMenuHeading: s.searchAll ? 'DYNAMICS 365 · ALL CLIENTS · ACCESS LOGGED' : 'DYNAMICS 365 · YOUR CLIENTS',
       custBorder: s.openMenu==='cust' ? '#1b4d3a' : '#d5d3ca',
-      custResults: results.map(c => ({ ...c, meta: 'CRM ' + c.ref + ' · ' + (c.owner === this.ME ? 'your client' : c.owner), pick: () => this.selectCustomer(c.id) })),
+      custResults: results.map(c => ({ ...c, meta: 'CRM ' + c.ref + ' · ' + (c.owner === this.me() ? 'your client' : c.owner), pick: () => this.selectCustomer(c.id) })),
       custNoResults: results.length === 0,
       canAddProspect: s.custQuery.trim().length >= 3 && !results.some(c => c.name.toLowerCase() === q),
       addProspect: () => this.set({ prospect:{ name:s.custQuery.trim(), email:'', verified:false, ref:'—' }, customer:null, custQuery:'', openMenu:null, crm:'done', partner:false, custEmail:'' }),
@@ -3208,7 +3249,7 @@ class Component extends DCLogic {
           { mark:'!', fg:'#8a6a2b', text:'Not found in Dynamics 365. A booking link cannot be sent until a client record exists.' },
           { mark:'·', fg:'#5d6560', text:'No relationship or suitability history available for a prospect.' },
         ] : [
-          rec.owner === this.ME ? null : { mark:'!', fg:'#8a6a2b', text:'Not your client — owned by ' + rec.owner + '. This view is restricted and the access is logged.' },
+          rec.owner === this.me() ? null : { mark:'!', fg:'#8a6a2b', text:'Not your client — owned by ' + rec.owner + '. This view is restricted and the access is logged.' },
           rec.partnerOf
             ? { mark:'✓', fg:'#3a423c', text:'Known to ' + rec.partnerOf + ' (Partner)' }
             : { mark:'·', fg:'#5d6560', text:'No partner relationship on record.' },
@@ -3222,9 +3263,13 @@ class Component extends DCLogic {
       rerunCrm: () => { this.setState({ crm:'checking' }); this._t4 = setTimeout(() => this.setState({ crm:'done' }), 800); },
 
       roleRm: s.role==='rm', roleLead: s.role==='lead',
-      setRoleRm: () => this.set({ role:'rm', screen:'home', openMenu:null, bookRm:'all', bookStatus:'all', bookQuery:'' }),
+      meName: this.me(), meFirst: this.meFirst(),
+      viewAsLeon: () => this.switchUser('lj'),
+      viewAsLucy: () => this.switchUser('lr'),
       setRoleLead: () => this.set({ role:'lead', screen:'home', openMenu:null, bookRm:'all', bookStatus:'all', bookQuery:'' }),
-      roleRmBg: s.role==='rm' ? '#e8efe9' : 'transparent', roleLeadBg: s.role==='lead' ? '#e8efe9' : 'transparent',
+      bgLeon: s.role==='rm' && s.user==='lj' ? '#e8efe9' : 'transparent',
+      bgLucy: s.role==='rm' && s.user==='lr' ? '#e8efe9' : 'transparent',
+      roleLeadBg: s.role==='lead' ? '#e8efe9' : 'transparent',
       myMeetings: myRows.map(deco),
       myEmpty: myRows.length===0,
       rmMetricCards: mcards(rachelRows, '5.4h'),
@@ -3500,6 +3545,29 @@ class Component extends DCLogic {
       onSubjectInput: (e) => this.set({ subject: e.target.value, subjectEdited:true }),
       custEmail: s.custEmail,
       onCustEmailInput: (e) => this.set({ custEmail: e.target.value }),
+      showCustChip: !!rec,
+      custChipName: rec ? rec.name : '',
+      custChipIni: rec ? rec.ini : '',
+      custHasEmails: !!(rec && rec.emails && rec.emails.length > 1),
+      custEmailCountNote: rec && rec.emails ? rec.emails.length + ' on file in Dynamics 365 — the first is used unless you change it' : '',
+      custEmailLabel: (() => {
+        if(!rec || !rec.emails) return 'Typed by you';
+        const i = rec.emails.findIndex(x => x.addr === s.custEmail);
+        if(i < 0) return 'Edited by you';
+        return rec.emails[i].label + (i === 0 ? ' · chosen automatically' : ' · chosen by you');
+      })(),
+      custEmailOptions: (rec && rec.emails ? rec.emails : []).map((em, i) => ({
+        addr: em.addr,
+        label: em.label + (i === 0 ? ' · default in D365' : ''),
+        selected: em.addr === s.custEmail,
+        bg: em.addr === s.custEmail ? '#f6f5f2' : '#fff',
+        pick: () => this.set({ custEmail: em.addr, openMenu:null }),
+      })),
+      custEmailBorder: s.openMenu==='custEmail' ? '#1b4d3a' : '#d5d3ca',
+      menuCustEmail: s.openMenu==='custEmail',
+      toggleCustEmailMenu: () => this.set({ openMenu: s.openMenu==='custEmail' ? null : 'custEmail' }),
+      menuComposeEmail: s.openMenu==='composeEmail',
+      toggleComposeEmailMenu: () => this.set({ openMenu: s.openMenu==='composeEmail' ? null : 'composeEmail' }),
 
       intakeIdle: s.intake==='idle', intakeExtracting: s.intake==='extracting', intakeDone: s.intake==='done',
       intakeText: s.intakeText, intakeSummary: s.intakeSummary,
@@ -3511,7 +3579,7 @@ class Component extends DCLogic {
       clearIntakeFile: () => this.set({ intakeFile:'', intakeText:'' }),
       extractIntake: () => { if(!s.intakeText.trim()) return; this.set({ intake:'extracting' }); this.runStages(['Reading the email','Identifying meeting type, duration and catering','Matching names to the staff directory'], () => this.extractFrom(this.state.intakeText)); },
       extractBg: s.intakeText.trim() ? '#1b4d3a' : '#a9b3ac', extractOpacity: s.intakeText.trim() ? '1' : '.6', extractCursor: s.intakeText.trim() ? 'pointer' : 'not-allowed',
-      sampleIntake: () => this.set({ intakeText: "Hi Rachel — I'd like to come in to talk through estate planning while I'm in Geneva next week. An hour should do it, and I'd be grateful if Alan could join given the trust structures. I'm gluten-free if we're doing lunch. Best, Hana" }),
+      sampleIntake: () => this.set({ intakeText: "Hi "+this.meFirst()+" — I'd like to come in to talk through estate planning while I'm in London next week. An hour should do it, and I'd be grateful if Alan could join given the trust structures. I'm gluten-free if we're doing lunch. Best, Hana" }),
       resetIntake: () => this.set({ intake:'idle', intakeText:'', intakeSummary:'', aiFields:{}, lowConf:{}, detailsConfirmed:false }),
 
       draftThinking: s.draft==='thinking', draftBusy, draftDone,
@@ -3548,7 +3616,7 @@ class Component extends DCLogic {
       showSentToast: s.sentToast && s.hasSent && conf == null && !s.cancelled,
       goCustomer: () => this.set({ surface:'customer', booking:'choose' }),
       notConfirmed: s.booking==='choose', bookingConfirmed: s.booking==='confirmed',
-      custSummary: typeName+' with Rachel Adeyemi · '+this.DURATIONS[s.durI==null?2:s.durI]+' · '+this.LOCATIONS[s.locI==null?0:s.locI],
+      custSummary: typeName+' with '+this.me()+' · '+this.DURATIONS[s.durI==null?2:s.durI]+' · '+this.LOCATIONS[s.locI==null?0:s.locI],
       custOptions: picked.map(i => ({ ...this.SLOTS[i], short: this.fmt(this.SLOTS[i].startH), room: roomTxt(this.SLOTS[i]), choose: () => this.set({ booking:'confirmed', confirmedSlot:i }) })),
       confLong: conf ? conf.long+' · '+this.fmt(conf.startH) : '',
       returnToRm: () => this.set({ surface:'rm', screen:'detail', sentToast:false }),
@@ -3562,7 +3630,7 @@ class Component extends DCLogic {
       detailWhen: bia ? 'Customer declined all proposed times — new options needed'
                 : s.cancelled ? 'Cancelled — room released, attendees notified'
                 : conf ? (conf.long+' · '+this.slotTime(s.confirmedSlot)+' · '+roomTxt(conf))
-                : (s.hasSent ? 'Sent to customer — awaiting selection' : 'Tue 29 Jul · 10:00–11:00 · Boardroom 12A, Mayfair'),
+                : (s.hasSent ? 'Sent to customer — awaiting selection' : 'Tue 29 Jul · 10:00–11:00 · Customer Room 1, Fleet St'),
       detailStatus: bia ? 'Needs new times' : s.cancelled ? 'Cancelled' : (conf ? 'Confirmed' : (s.hasSent ? 'Awaiting' : 'Confirmed')),
       detailStatusFg: bia ? '#9a6f2e' : s.cancelled ? '#96301f' : (conf ? '#1f6b45' : (s.hasSent ? '#9a6f2e' : '#1f6b45')),
       detailStatusBg: bia ? '#f7f0e2' : s.cancelled ? '#f8ebe7' : (conf ? '#e9f2ec' : (s.hasSent ? '#f7f0e2' : '#e9f2ec')),
